@@ -870,7 +870,7 @@
             let position;
 
             let data = cache.data;
-            console.log("Cache data", data)
+            console.log("Cache data", data);
 
             // if (!tiledImage.isTainted()) {
             //     if((data instanceof CanvasRenderingContext2D) && $.isCanvasTainted(data.canvas)){
