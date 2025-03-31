@@ -932,8 +932,6 @@
                         this._raiseDrawerErrorEvent(tiledImage, 'Unknown error when uploading texture. Falling back to CanvasDrawer for this TiledImage.');
                         this.setInternalCacheNeedsRefresh();
                     }
-                }
-            }
             // if (data instanceof Image) {
             //     const canvas = document.createElement( 'canvas' );
             //     canvas.width = data.width;
@@ -948,6 +946,7 @@
             $.console.error("Unsupported data used for WebGL Drawer - probably a bug!");
             return {};
         }
+
 
         internalCacheFree(data) {
             if (data && data.texture) {
