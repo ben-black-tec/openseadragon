@@ -870,15 +870,14 @@
             let position;
 
             let data = cache.data;
-            console.log("Cache data", data);
 
-            // if (!tiledImage.isTainted()) {
-            //     if((data instanceof CanvasRenderingContext2D) && $.isCanvasTainted(data.canvas)){
-            //         tiledImage.setTainted(true);
-            //         $.console.warn('WebGL cannot be used to draw this TiledImage because it has tainted data. Does crossOriginPolicy need to be set?');
-            //         this._raiseDrawerErrorEvent(tiledImage, 'Tainted data cannot be used by the WebGLDrawer. Falling back to CanvasDrawer for this TiledImage.');
-            //         this.setInternalCacheNeedsRefresh();
-            //     } else {
+            if (!tiledImage.isTainted()) {
+                if((data instanceof CanvasRenderingContext2D) && $.isCanvasTainted(data.canvas)){
+                    tiledImage.setTainted(true);
+                    $.console.warn('WebGL cannot be used to draw this TiledImage because it has tainted data. Does crossOriginPolicy need to be set?');
+                    this._raiseDrawerErrorEvent(tiledImage, 'Tainted data cannot be used by the WebGLDrawer. Falling back to CanvasDrawer for this TiledImage.');
+                    this.setInternalCacheNeedsRefresh();
+                } else {
                     let sourceWidthFraction, sourceHeightFraction;
                     if (tile.sourceBounds) {
                         sourceWidthFraction = Math.min(tile.sourceBounds.width, data.width) / data.width;
@@ -932,21 +931,22 @@
                         this._raiseDrawerErrorEvent(tiledImage, 'Unknown error when uploading texture. Falling back to CanvasDrawer for this TiledImage.');
                         this.setInternalCacheNeedsRefresh();
                     }
-            // if (data instanceof Image) {
-            //     const canvas = document.createElement( 'canvas' );
-            //     canvas.width = data.width;
-            //     canvas.height = data.height;
-            //     const context = canvas.getContext('2d', { willReadFrequently: true });
-            //     context.drawImage( data, 0, 0 );
-            //     data = context;
-            // }
-            // if (data instanceof CanvasRenderingContext2D) {
-            //     return data;
-            // }
+                }
+            }
+            if (data instanceof Image) {
+                const canvas = document.createElement( 'canvas' );
+                canvas.width = data.width;
+                canvas.height = data.height;
+                const context = canvas.getContext('2d', { willReadFrequently: true });
+                context.drawImage( data, 0, 0 );
+                data = context;
+            }
+            if (data instanceof CanvasRenderingContext2D) {
+                return data;
+            }
             $.console.error("Unsupported data used for WebGL Drawer - probably a bug!");
             return {};
         }
-
 
         internalCacheFree(data) {
             if (data && data.texture) {

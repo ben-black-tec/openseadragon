@@ -1479,15 +1479,11 @@ $.extend($.TiledImage.prototype, $.EventSource.prototype, /** @lends OpenSeadrag
                 break;
             }
         }
-
+        this._sortTiles(bestTiles);
 
         // Load the new 'best' n tiles
         if (bestTiles && bestTiles.length > 0) {
-            for (let tile of bestTiles) {
-                if (tile) {
-                    this._loadTile(tile, currentTime);
-                }
-            }
+            this._loadTiles(bestTiles, currentTime);
             this._needsDraw = true;
             return false;
         } else {
@@ -2104,44 +2100,65 @@ $.extend($.TiledImage.prototype, $.EventSource.prototype, /** @lends OpenSeadrag
     /**
      * Dispatch a job to the ImageLoader to load the Image for a Tile.
      * @private
-     * @param {OpenSeadragon.Tile} tile
+     * @param {OpenSeadragon.Tile[]} tiles
      * @param {Number} time
      */
-    _loadTile: function(tile, time ) {
-        var _this = this;
-        tile.loading = true;
-        tile.tiledImage = this;
-        if (!this._imageLoader.addJob({
-            src: tile.getUrl(),
-            tile: tile,
-            source: this.source,
-            postData: tile.postData,
-            loadWithAjax: tile.loadWithAjax,
-            ajaxHeaders: tile.ajaxHeaders,
-            crossOriginPolicy: this.crossOriginPolicy,
-            ajaxWithCredentials: this.ajaxWithCredentials,
-            callback: function( data, errorMsg, tileRequest, dataType ){
-                _this._onTileLoad( tile, time, data, errorMsg, tileRequest, dataType );
-            },
-            abort: function() {
-                tile.loading = false;
-            }
-        })) {
-            /**
-             * Triggered if tile load job was added to a full queue.
-             * This allows to react upon e.g. network not being able to serve the tiles fast enough.
-             * @event job-queue-full
-             * @memberof OpenSeadragon.Viewer
-             * @type {object}
-             * @property {OpenSeadragon.Tile} tile - The tile that failed to load.
-             * @property {OpenSeadragon.TiledImage} tiledImage - The tiled image the tile belongs to.
-             * @property {number} time - The time in milliseconds when the tile load began.
-             */
-            this.viewer.raiseEvent("job-queue-full", {
-                tile: tile,
-                tiledImage: this,
-                time: time,
+    _loadTiles: function(tiles, time ) {
+        const _this = this;
+        if(this._imageLoader.replaceJobQueue){
+            this._imageLoader.replaceJobQueue({
+                tiles: tiles,
+                source: this.source,
+                crossOriginPolicy: this.crossOriginPolicy,
+                ajaxWithCredentials: this.ajaxWithCredentials,
+                callback: function( tile, data, errorMsg, tileRequest, dataType ){
+                    _this._onTileLoad( tile, time, data, errorMsg, tileRequest, dataType );
+                },
+                abort: function(tile) {
+                    tile.loading = false;
+                }
             });
+        }
+        else{
+            const loadTiles = tiles.splice(0, this.maxTilesPerFrame);
+            for (let tile of loadTiles) {
+                if (tile) {
+                    tile.loading = true;
+                    tile.tiledImage = this;
+                    if (!this._imageLoader.addJob({
+                        src: tile.getUrl(),
+                        tile: tile,
+                        source: this.source,
+                        postData: tile.postData,
+                        loadWithAjax: tile.loadWithAjax,
+                        ajaxHeaders: tile.ajaxHeaders,
+                        crossOriginPolicy: this.crossOriginPolicy,
+                        ajaxWithCredentials: this.ajaxWithCredentials,
+                        callback: function( data, errorMsg, tileRequest, dataType ){
+                            _this._onTileLoad( tile, time, data, errorMsg, tileRequest, dataType );
+                        },
+                        abort: function() {
+                            tile.loading = false;
+                        }
+                    })) {
+                        /**
+                         * Triggered if tile load job was added to a full queue.
+                         * This allows to react upon e.g. network not being able to serve the tiles fast enough.
+                         * @event job-queue-full
+                         * @memberof OpenSeadragon.Viewer
+                         * @type {object}
+                         * @property {OpenSeadragon.Tile} tile - The tile that failed to load.
+                         * @property {OpenSeadragon.TiledImage} tiledImage - The tiled image the tile belongs to.
+                         * @property {number} time - The time in milliseconds when the tile load began.
+                         */
+                        this.viewer.raiseEvent("job-queue-full", {
+                            tile: tile,
+                            tiledImage: this,
+                            time: time,
+                        });
+                    }
+                }
+            }
         }
     },
 
@@ -2338,10 +2355,12 @@ $.extend($.TiledImage.prototype, $.EventSource.prototype, /** @lends OpenSeadrag
             return [tile];
         }
         previousBest.push(tile);
-        this._sortTiles(previousBest);
-        if (previousBest.length > maxNTiles) {
-            previousBest.pop();
-        }
+        // we want to just accumulate all the loadable tiles and then only
+        // prioritize later when we have a better idea of which images we actually want
+        // this._sortTiles(previousBest);
+        // if (previousBest.length > maxNTiles) {
+        //     previousBest.pop();
+        // }
         return previousBest;
     },
 
