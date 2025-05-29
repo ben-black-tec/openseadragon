@@ -2106,6 +2106,11 @@ $.extend($.TiledImage.prototype, $.EventSource.prototype, /** @lends OpenSeadrag
     _loadTiles: function(tiles, time ) {
         const _this = this;
         if(this._imageLoader.replaceJobQueue){
+            for (let tile of loadTiles) {
+                if (tile) {
+                    tile.tiledImage = this;
+                }
+            }
             this._imageLoader.replaceJobQueue({
                 tiles: tiles,
                 source: this.source,
@@ -2115,7 +2120,9 @@ $.extend($.TiledImage.prototype, $.EventSource.prototype, /** @lends OpenSeadrag
                     _this._onTileLoad( tile, time, data, errorMsg, tileRequest, dataType );
                 },
                 abort: function(tile) {
-                    tile.loading = false;
+                    // not required since we can just keep passing in the tile
+                    // even when it is loading, the tile queue will track its progress
+                    // tile.loading = false;
                 }
             });
         }
