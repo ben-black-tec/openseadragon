@@ -275,9 +275,9 @@ class CanvasDrawer extends OpenSeadragon.DrawerBase{
         if (tiledImage.opacity === 0 || (lastDrawn.length === 0 && !tiledImage.placeholderFillStyle)) {
             return;
         }
+        console.log(lastDrawn)
 
         let tile = lastDrawn[0];
-        console.log(tile);
         let useSketch;
 
         if (tile) {
