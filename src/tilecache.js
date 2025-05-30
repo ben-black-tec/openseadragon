@@ -671,24 +671,24 @@
             const originalData = this._data,
                 stepCount = conversionPath.length,
                 _this = this,
-                convert = (x, i) => {
-                    console.log("Convert",x)
-                    return x
-                    if (i >= stepCount) {
-                        _this._data = x;
-                        _this.loaded = true;
-                        _this._checkAwaitsConvert();
-                        return $.Promise.resolve(x);
-                    }
-                    let edge = conversionPath[i];
-                    let y = edge.transform(_this._tRef, x);
-                    if (y === undefined) {
-                        _this.loaded = false;
-                        throw `[CacheRecord._convert] data mid result undefined value (while converting using ${edge}})`;
-                    }
-                    convertor.destroy(x, edge.origin.value);
-                    const result = $.type(y) === "promise" ? y : $.Promise.resolve(y);
-                    return result.then(res => convert(res, i + 1));
+                convert = (x, _i) => {
+                    console.log("Convert",x);
+                    return x;
+                    // if (i >= stepCount) {
+                    //     _this._data = x;
+                    //     _this.loaded = true;
+                    //     _this._checkAwaitsConvert();
+                    //     return $.Promise.resolve(x);
+                    // }
+                    // let edge = conversionPath[i];
+                    // let y = edge.transform(_this._tRef, x);
+                    // if (y === undefined) {
+                    //     _this.loaded = false;
+                    //     throw `[CacheRecord._convert] data mid result undefined value (while converting using ${edge}})`;
+                    // }
+                    // convertor.destroy(x, edge.origin.value);
+                    // const result = $.type(y) === "promise" ? y : $.Promise.resolve(y);
+                    // return result.then(res => convert(res, i + 1));
                 };
 
             this.loaded = false;
