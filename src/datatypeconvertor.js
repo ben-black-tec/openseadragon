@@ -205,6 +205,7 @@ $.DataTypeConvertor = class {
             img.src = url;
         });
         const canvasContextCreator = (tile, imageData) => {
+            console.log("ContextCreator called");
             const canvas = document.createElement( 'canvas' );
             canvas.width = imageData.width;
             canvas.height = imageData.height;

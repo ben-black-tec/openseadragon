@@ -98,7 +98,7 @@ class CanvasDrawer extends OpenSeadragon.DrawerBase{
     }
 
     getSupportedDataFormats() {
-        return ["context2d"];//, "image"];
+        return ["context2d", "image"];
     }
 
     /**
