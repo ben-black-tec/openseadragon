@@ -599,8 +599,9 @@ class CanvasDrawer extends OpenSeadragon.DrawerBase{
         if (tile.flipped) {
             context.scale(-1, 1);
         }
+        console.log("Rendered", rendered);
         context.drawImage(
-            rendered.canvas,
+            rendered,
             0,
             0,
             sourceWidth,
