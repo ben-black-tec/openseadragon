@@ -277,6 +277,7 @@ class CanvasDrawer extends OpenSeadragon.DrawerBase{
         }
 
         let tile = lastDrawn[0];
+        console.log(tile);
         let useSketch;
 
         if (tile) {
@@ -537,7 +538,6 @@ class CanvasDrawer extends OpenSeadragon.DrawerBase{
             );
             return;
         }
-        console.log("orig", tile.position.x, tile.position.y, tile.size.x, tile.size.y, scale, translate);
 
         const rendered = this.getDataToDraw(tile);
         if (!rendered) {
