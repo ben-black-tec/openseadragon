@@ -672,6 +672,8 @@
                 stepCount = conversionPath.length,
                 _this = this,
                 convert = (x, i) => {
+                    console.log("Convert",x)
+                    return x
                     if (i >= stepCount) {
                         _this._data = x;
                         _this.loaded = true;
