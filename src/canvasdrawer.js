@@ -565,6 +565,7 @@ class CanvasDrawer extends OpenSeadragon.DrawerBase{
         //ie its done fading or fading is turned off, and if we are drawing
         //an image with an alpha channel, then the only way
         //to avoid seeing the tile underneath is to clear the rectangle
+        console.log("Pre", position.x, position.y, size.x, size.y);
         if (context.globalAlpha === 1 && tile.hasTransparency) {
             if (shouldRoundPositionAndSize) {
                 // Round to the nearest whole pixel so we don't get seams from overlap.
@@ -599,6 +600,7 @@ class CanvasDrawer extends OpenSeadragon.DrawerBase{
         if (tile.flipped) {
             context.scale(-1, 1);
         }
+        console.log("Pre", -size.x / 2, position.y, size.x, size.y);
         context.drawImage(
             rendered,
             0,
