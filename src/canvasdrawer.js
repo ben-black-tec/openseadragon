@@ -98,7 +98,7 @@ class CanvasDrawer extends OpenSeadragon.DrawerBase{
     }
 
     getSupportedDataFormats() {
-        return ["context2d"];
+        return ["context2d", "image"];
     }
 
     /**
@@ -153,7 +153,7 @@ class CanvasDrawer extends OpenSeadragon.DrawerBase{
      * @private
      */
     minimumOverlapRequired(tiledImage) {
-        return true;
+        return false;
     }
 
 
