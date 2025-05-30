@@ -878,7 +878,7 @@
                     this._raiseDrawerErrorEvent(tiledImage, 'Tainted data cannot be used by the WebGLDrawer. Falling back to CanvasDrawer for this TiledImage.');
                     this.setInternalCacheNeedsRefresh();
                 } else {
-                    console.log("Canvas normal",data);
+                    console.log("Canvas normal", data);
                     let sourceWidthFraction, sourceHeightFraction;
                     if (tile.sourceBounds) {
                         sourceWidthFraction = Math.min(tile.sourceBounds.width, data.width) / data.width;

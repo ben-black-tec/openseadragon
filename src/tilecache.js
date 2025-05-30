@@ -670,9 +670,9 @@
 
             const originalData = this._data,
                 stepCount = conversionPath.length,
-                _this = this,
+                // _this = this,
                 convert = (x, _i) => {
-                    console.log("Convert",x);
+                    console.log("Convert", x);
                     return x;
                     // if (i >= stepCount) {
                     //     _this._data = x;
