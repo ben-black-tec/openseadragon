@@ -588,11 +588,11 @@ class CanvasDrawer extends OpenSeadragon.DrawerBase{
 
         let sourceWidth, sourceHeight;
         if (tile.sourceBounds) {
-            sourceWidth = Math.min(tile.sourceBounds.width, rendered.canvas.width);
-            sourceHeight = Math.min(tile.sourceBounds.height, rendered.canvas.height);
+            sourceWidth = Math.min(tile.sourceBounds.width, rendered.canvas.width ?? rendered.width);
+            sourceHeight = Math.min(tile.sourceBounds.height, rendered.canvas.height ?? rendered.height);
         } else {
-            sourceWidth = rendered.canvas.width;
-            sourceHeight = rendered.canvas.height;
+            sourceWidth = rendered.canvas.width ?? rendered.width;
+            sourceHeight = rendered.canvas.height ?? rendered.width;
         }
 
         context.translate(position.x + size.x / 2, 0);
