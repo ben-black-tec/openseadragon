@@ -240,12 +240,6 @@ class CanvasDrawer extends OpenSeadragon.DrawerBase{
             this.canvas.width = viewportSize.x;
             this.canvas.height = viewportSize.y;
             this._updateImageSmoothingEnabled(this.context);
-            if ( this.sketchCanvas !== null ) {
-                var sketchCanvasSize = this._calculateSketchCanvasSize();
-                this.sketchCanvas.width = sketchCanvasSize.x;
-                this.sketchCanvas.height = sketchCanvasSize.y;
-                this._updateImageSmoothingEnabled(this.sketchContext);
-            }
         }
         this._clear();
     }
@@ -268,207 +262,206 @@ class CanvasDrawer extends OpenSeadragon.DrawerBase{
     /**
      * Draws a TiledImage.
      * @private
-     *
      */
     _drawTiles( tiledImage ) {
-        const lastDrawn =  tiledImage.getTilesToDraw().map(info => info.tile);
-        if (tiledImage.opacity === 0 || (lastDrawn.length === 0 && !tiledImage.placeholderFillStyle)) {
-            return;
-        }
-        console.log(lastDrawn);
+        // const lastDrawn =  tiledImage.getTilesToDraw().map(info => info.tile);
+        // if (tiledImage.opacity === 0 || (lastDrawn.length === 0 && !tiledImage.placeholderFillStyle)) {
+        //     return;
+        // }
+        // console.log(lastDrawn);
 
-        let tile = lastDrawn[0];
-        let useSketch;
+        // let tile = lastDrawn[0];
+        // let useSketch;
 
-        if (tile) {
-            useSketch = tiledImage.opacity < 1 ||
-                (tiledImage.compositeOperation && tiledImage.compositeOperation !== 'source-over') ||
-                (!tiledImage._isBottomItem() &&
-                tiledImage.source.hasTransparency(null, tile.getUrl(), tile.ajaxHeaders, tile.postData));
-        }
+        // if (tile) {
+        //     useSketch = tiledImage.opacity < 1 ||
+        //         (tiledImage.compositeOperation && tiledImage.compositeOperation !== 'source-over') ||
+        //         (!tiledImage._isBottomItem() &&
+        //         tiledImage.source.hasTransparency(null, tile.getUrl(), tile.ajaxHeaders, tile.postData));
+        // }
 
-        let sketchScale;
-        let sketchTranslate;
+        // let sketchScale;
+        // let sketchTranslate;
 
-        const zoom = this.viewport.getZoom(true);
-        const imageZoom = tiledImage.viewportToImageZoom(zoom);
+        // const zoom = this.viewport.getZoom(true);
+        // const imageZoom = tiledImage.viewportToImageZoom(zoom);
 
-        if (lastDrawn.length > 1 &&
-            imageZoom > tiledImage.smoothTileEdgesMinZoom &&
-            !tiledImage.iOSDevice &&
-            tiledImage.getRotation(true) % 360 === 0 ){
-            // TODO: support tile edge smoothing with tiled image rotation.
-            // When zoomed in a lot (>100%) the tile edges are visible.
-            // So we have to composite them at ~100% and scale them up together.
-            // Note: Disabled on iOS devices per default as it causes a native crash
-            useSketch = true;
+        // if (lastDrawn.length > 1 &&
+        //     imageZoom > tiledImage.smoothTileEdgesMinZoom &&
+        //     !tiledImage.iOSDevice &&
+        //     tiledImage.getRotation(true) % 360 === 0 ){
+        //     // TODO: support tile edge smoothing with tiled image rotation.
+        //     // When zoomed in a lot (>100%) the tile edges are visible.
+        //     // So we have to composite them at ~100% and scale them up together.
+        //     // Note: Disabled on iOS devices per default as it causes a native crash
+        //     useSketch = true;
 
-            const context = tile.length && this.getDataToDraw(tile);
-            if (context) {
-                sketchScale = context.canvas.width / (tile.size.x * $.pixelDensityRatio);
-            } else {
-                sketchScale = 1;
-            }
-            sketchTranslate = tile.getTranslationForEdgeSmoothing(sketchScale,
-                this._getCanvasSize(false),
-                this._getCanvasSize(true));
-        }
+        //     const context = tile.length && this.getDataToDraw(tile);
+        //     if (context) {
+        //         sketchScale = context.canvas.width / (tile.size.x * $.pixelDensityRatio);
+        //     } else {
+        //         sketchScale = 1;
+        //     }
+        //     sketchTranslate = tile.getTranslationForEdgeSmoothing(sketchScale,
+        //         this._getCanvasSize(false),
+        //         this._getCanvasSize(true));
+        // }
 
-        let bounds;
-        if (useSketch) {
-            if (!sketchScale) {
-                // Except when edge smoothing, we only clean the part of the
-                // sketch canvas we are going to use for performance reasons.
-                bounds = this.viewport.viewportToViewerElementRectangle(
-                    tiledImage.getClippedBounds(true))
-                    .getIntegerBoundingBox();
+        // let bounds;
+        // if (useSketch) {
+        //     if (!sketchScale) {
+        //         // Except when edge smoothing, we only clean the part of the
+        //         // sketch canvas we are going to use for performance reasons.
+        //         bounds = this.viewport.viewportToViewerElementRectangle(
+        //             tiledImage.getClippedBounds(true))
+        //             .getIntegerBoundingBox();
 
-                bounds = bounds.times($.pixelDensityRatio);
-            }
-            this._clear(true, bounds);
-        }
+        //         bounds = bounds.times($.pixelDensityRatio);
+        //     }
+        //     this._clear(true, bounds);
+        // }
 
-        // When scaling, we must rotate only when blending the sketch canvas to
-        // avoid interpolation
-        if (!sketchScale) {
-            this._setRotations(tiledImage, useSketch);
-        }
+        // // When scaling, we must rotate only when blending the sketch canvas to
+        // // avoid interpolation
+        // if (!sketchScale) {
+        //     this._setRotations(tiledImage, useSketch);
+        // }
 
-        let usedClip = false;
-        if ( tiledImage._clip ) {
-            this._saveContext(useSketch);
+        // let usedClip = false;
+        // if ( tiledImage._clip ) {
+        //     this._saveContext(useSketch);
 
-            let box = tiledImage.imageToViewportRectangle(tiledImage._clip, true);
-            box = box.rotate(-tiledImage.getRotation(true), tiledImage._getRotationPoint(true));
-            let clipRect = this.viewportToDrawerRectangle(box);
-            if (sketchScale) {
-                clipRect = clipRect.times(sketchScale);
-            }
-            if (sketchTranslate) {
-                clipRect = clipRect.translate(sketchTranslate);
-            }
-            this._setClip(clipRect, useSketch);
+        //     let box = tiledImage.imageToViewportRectangle(tiledImage._clip, true);
+        //     box = box.rotate(-tiledImage.getRotation(true), tiledImage._getRotationPoint(true));
+        //     let clipRect = this.viewportToDrawerRectangle(box);
+        //     if (sketchScale) {
+        //         clipRect = clipRect.times(sketchScale);
+        //     }
+        //     if (sketchTranslate) {
+        //         clipRect = clipRect.translate(sketchTranslate);
+        //     }
+        //     this._setClip(clipRect, useSketch);
 
-            usedClip = true;
-        }
+        //     usedClip = true;
+        // }
 
-        if (tiledImage._croppingPolygons) {
-            const self = this;
-            if(!usedClip){
-                this._saveContext(useSketch);
-            }
-            try {
-                const polygons = tiledImage._croppingPolygons.map(function (polygon) {
-                    return polygon.map(function (coord) {
-                        const point = tiledImage
-                            .imageToViewportCoordinates(coord.x, coord.y, true)
-                            .rotate(-tiledImage.getRotation(true), tiledImage._getRotationPoint(true));
-                        let clipPoint = self.viewportCoordToDrawerCoord(point);
-                        if (sketchScale) {
-                            clipPoint = clipPoint.times(sketchScale);
-                        }
-                        if (sketchTranslate) { // mostly fixes #2312
-                            clipPoint = clipPoint.plus(sketchTranslate);
-                        }
-                        return clipPoint;
-                    });
-                });
-                this._clipWithPolygons(polygons, useSketch);
-            } catch (e) {
-                $.console.error(e);
-            }
-            usedClip = true;
-        }
-        tiledImage._hasOpaqueTile = false;
-        if ( tiledImage.placeholderFillStyle && tiledImage._hasOpaqueTile === false ) {
-            let placeholderRect = this.viewportToDrawerRectangle(tiledImage.getBoundsNoRotate(true));
-            if (sketchScale) {
-                placeholderRect = placeholderRect.times(sketchScale);
-            }
-            if (sketchTranslate) {
-                placeholderRect = placeholderRect.translate(sketchTranslate);
-            }
+        // if (tiledImage._croppingPolygons) {
+        //     const self = this;
+        //     if(!usedClip){
+        //         this._saveContext(useSketch);
+        //     }
+        //     try {
+        //         const polygons = tiledImage._croppingPolygons.map(function (polygon) {
+        //             return polygon.map(function (coord) {
+        //                 const point = tiledImage
+        //                     .imageToViewportCoordinates(coord.x, coord.y, true)
+        //                     .rotate(-tiledImage.getRotation(true), tiledImage._getRotationPoint(true));
+        //                 let clipPoint = self.viewportCoordToDrawerCoord(point);
+        //                 if (sketchScale) {
+        //                     clipPoint = clipPoint.times(sketchScale);
+        //                 }
+        //                 if (sketchTranslate) { // mostly fixes #2312
+        //                     clipPoint = clipPoint.plus(sketchTranslate);
+        //                 }
+        //                 return clipPoint;
+        //             });
+        //         });
+        //         this._clipWithPolygons(polygons, useSketch);
+        //     } catch (e) {
+        //         $.console.error(e);
+        //     }
+        //     usedClip = true;
+        // }
+        // tiledImage._hasOpaqueTile = false;
+        // if ( tiledImage.placeholderFillStyle && tiledImage._hasOpaqueTile === false ) {
+        //     let placeholderRect = this.viewportToDrawerRectangle(tiledImage.getBoundsNoRotate(true));
+        //     if (sketchScale) {
+        //         placeholderRect = placeholderRect.times(sketchScale);
+        //     }
+        //     if (sketchTranslate) {
+        //         placeholderRect = placeholderRect.translate(sketchTranslate);
+        //     }
 
-            let fillStyle = null;
-            if ( typeof tiledImage.placeholderFillStyle === "function" ) {
-                fillStyle = tiledImage.placeholderFillStyle(tiledImage, this.context);
-            }
-            else {
-                fillStyle = tiledImage.placeholderFillStyle;
-            }
+        //     let fillStyle = null;
+        //     if ( typeof tiledImage.placeholderFillStyle === "function" ) {
+        //         fillStyle = tiledImage.placeholderFillStyle(tiledImage, this.context);
+        //     }
+        //     else {
+        //         fillStyle = tiledImage.placeholderFillStyle;
+        //     }
 
-            this._drawRectangle(placeholderRect, fillStyle, useSketch);
-        }
+        //     this._drawRectangle(placeholderRect, fillStyle, useSketch);
+        // }
 
-        const subPixelRoundingRule = determineSubPixelRoundingRule(tiledImage.subPixelRoundingForTransparency);
+        // const subPixelRoundingRule = determineSubPixelRoundingRule(tiledImage.subPixelRoundingForTransparency);
 
-        let shouldRoundPositionAndSize = false;
+        // let shouldRoundPositionAndSize = false;
 
-        if (subPixelRoundingRule === $.SUBPIXEL_ROUNDING_OCCURRENCES.ALWAYS) {
-            shouldRoundPositionAndSize = true;
-        } else if (subPixelRoundingRule === $.SUBPIXEL_ROUNDING_OCCURRENCES.ONLY_AT_REST) {
-            shouldRoundPositionAndSize = !(this.viewer && this.viewer.isAnimating());
-        }
+        // if (subPixelRoundingRule === $.SUBPIXEL_ROUNDING_OCCURRENCES.ALWAYS) {
+        //     shouldRoundPositionAndSize = true;
+        // } else if (subPixelRoundingRule === $.SUBPIXEL_ROUNDING_OCCURRENCES.ONLY_AT_REST) {
+        //     shouldRoundPositionAndSize = !(this.viewer && this.viewer.isAnimating());
+        // }
 
-        // Iterate over the tiles to draw, and draw them
-        for (let i = 0; i < lastDrawn.length; i++) {
-            tile = lastDrawn[ i ];
-            this._drawTile( tile, tiledImage, useSketch, sketchScale,
-                sketchTranslate, shouldRoundPositionAndSize, tiledImage.source );
+        // // Iterate over the tiles to draw, and draw them
+        // for (let i = 0; i < lastDrawn.length; i++) {
+        //     tile = lastDrawn[ i ];
+        //     this._drawTile( tile, tiledImage, useSketch, sketchScale,
+        //         sketchTranslate, shouldRoundPositionAndSize, tiledImage.source );
 
-            if( this.viewer ){
-                /**
-                 * Raised when a tile is drawn to the canvas. Only valid for
-                 * context2d and html drawers.
-                 *
-                 * @event tile-drawn
-                 * @memberof OpenSeadragon.Viewer
-                 * @type {object}
-                 * @property {OpenSeadragon.Viewer} eventSource - A reference to the Viewer which raised the event.
-                 * @property {OpenSeadragon.TiledImage} tiledImage - Which TiledImage is being drawn.
-                 * @property {OpenSeadragon.Tile} tile
-                 * @property {?Object} userData - Arbitrary subscriber-defined object.
-                 */
-                this.viewer.raiseEvent( 'tile-drawn', {
-                    tiledImage: tiledImage,
-                    tile: tile
-                });
-            }
-        }
+        //     if( this.viewer ){
+        //         /**
+        //          * Raised when a tile is drawn to the canvas. Only valid for
+        //          * context2d and html drawers.
+        //          *
+        //          * @event tile-drawn
+        //          * @memberof OpenSeadragon.Viewer
+        //          * @type {object}
+        //          * @property {OpenSeadragon.Viewer} eventSource - A reference to the Viewer which raised the event.
+        //          * @property {OpenSeadragon.TiledImage} tiledImage - Which TiledImage is being drawn.
+        //          * @property {OpenSeadragon.Tile} tile
+        //          * @property {?Object} userData - Arbitrary subscriber-defined object.
+        //          */
+        //         this.viewer.raiseEvent( 'tile-drawn', {
+        //             tiledImage: tiledImage,
+        //             tile: tile
+        //         });
+        //     }
+        // }
 
-        if ( usedClip ) {
-            this._restoreContext( useSketch );
-        }
+        // if ( usedClip ) {
+        //     this._restoreContext( useSketch );
+        // }
 
-        if (!sketchScale) {
-            if (tiledImage.getRotation(true) % 360 !== 0) {
-                this._restoreRotationChanges(useSketch);
-            }
-            if (this.viewport.getRotation(true) % 360 !== 0) {
-                this._restoreRotationChanges(useSketch);
-            }
-        }
+        // if (!sketchScale) {
+        //     if (tiledImage.getRotation(true) % 360 !== 0) {
+        //         this._restoreRotationChanges(useSketch);
+        //     }
+        //     if (this.viewport.getRotation(true) % 360 !== 0) {
+        //         this._restoreRotationChanges(useSketch);
+        //     }
+        // }
 
-        if (useSketch) {
-            if (sketchScale) {
-                this._setRotations(tiledImage);
-            }
-            this.blendSketch({
-                opacity: tiledImage.opacity,
-                scale: sketchScale,
-                translate: sketchTranslate,
-                compositeOperation: tiledImage.compositeOperation,
-                bounds: bounds
-            });
-            if (sketchScale) {
-                if (tiledImage.getRotation(true) % 360 !== 0) {
-                    this._restoreRotationChanges(false);
-                }
-                if (this.viewport.getRotation(true) % 360 !== 0) {
-                    this._restoreRotationChanges(false);
-                }
-            }
-        }
+        // if (useSketch) {
+        //     if (sketchScale) {
+        //         this._setRotations(tiledImage);
+        //     }
+        //     this.blendSketch({
+        //         opacity: tiledImage.opacity,
+        //         scale: sketchScale,
+        //         translate: sketchTranslate,
+        //         compositeOperation: tiledImage.compositeOperation,
+        //         bounds: bounds
+        //     });
+        //     if (sketchScale) {
+        //         if (tiledImage.getRotation(true) % 360 !== 0) {
+        //             this._restoreRotationChanges(false);
+        //         }
+        //         if (this.viewport.getRotation(true) % 360 !== 0) {
+        //             this._restoreRotationChanges(false);
+        //         }
+        //     }
+        // }
 
         this._drawDebugInfo( tiledImage, lastDrawn );
 
