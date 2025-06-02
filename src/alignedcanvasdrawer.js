@@ -345,6 +345,7 @@
             ) {
                 return;
             }
+            console.log("tilesToDraw", tilesToDraw);
 
             let levelSet = Array.from(
                 new Set(tilesToDraw.map((tile) => tile.level))
