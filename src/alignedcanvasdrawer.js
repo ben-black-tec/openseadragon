@@ -70,13 +70,6 @@
             this.context = this.canvas.getContext("2d");
             this.scanvas = document.createElement("canvas");
             this.scontext = this.scanvas.getContext("2d");
-            // this.canvases = new Map();
-            // this.contexts = new Map();
-
-            // Sketch canvas used to temporarily draw tiles which cannot be drawn directly
-            // to the main canvas due to opacity. Lazily initialized.
-            this.sketchCanvas = null;
-            this.sketchContext = null;
 
             // Image smoothing for canvas rendering (only if canvas is used).
             // Canvas default is "true", so this will only be changed if user specifies "false" in the options or via setImageSmoothinEnabled.
@@ -119,6 +112,16 @@
          */
         draw(tiledImages) {
             this._prepareNewFrame(); // prepare to draw a new frame
+            if(tiledImages.length) {
+                // background color. Should be the same placeholderFillStyle for all tiledImages
+                this.context.fillStyle = tiledImages[0].placeholderFillStyle || $.DEFAULT_SETTINGS.placeholderFillStyle;
+                this.context.fillRect(
+                    0,
+                    0,
+                    this.canvas.width,
+                    this.canvas.height
+                );
+            }
             for (const tiledImage of tiledImages) {
                 if (tiledImage.opacity !== 0) {
                     this._drawTiles(tiledImage);
@@ -341,21 +344,8 @@
 
             if (
                 tiledImage.opacity === 0 ||
-                (lastDrawn.length === 0 && !tiledImage.placeholderFillStyle)
+                lastDrawn.length === 0
             ) {
-                return;
-            }
-            else if (lastDrawn.length === 0){
-                // TODO: right now we are overwriting too much data if there
-                // are multipled tiledImages, this should be re-done to only
-                // draw within scope of tiledimage
-                this.context.fillStyle = tiledImage.placeholderFillStyle;
-                this.context.fillRect(
-                    0,
-                    0,
-                    this.scanvas.width,
-                    this.scanvas.height
-                );
                 return;
             }
 
@@ -422,6 +412,8 @@
                     Math.ceil(viewportSizeY)
                 );
             }
+            // TODO: consider drawing the base canvas back onto this
+            // temporary canvas to imitate cross-tiledimage transparency
             this.scontext.fillStyle = tiledImage.placeholderFillStyle;
             this.scontext.fillRect(
                 0,
@@ -465,9 +457,13 @@
             if($.pixelDensityRatio !== 1){
                 this.context.scale($.pixelDensityRatio, $.pixelDensityRatio);
             }
-            // TODO: right now we are overwriting too much data if there
-            // are multipled tiledImages, this should be re-done to only
-            // draw within scope of tiledimage
+            // clips drawing area to specific tiledimage
+            // important for overlapping regions to be drawn correctly
+            this.context.beginPath();
+            const rect = this.viewport.viewportToViewerElementRectangle(tiledImage.getClippedBounds(true));
+            this.context.rect(rect.x, rect.y, rect.width, rect.height);
+            this.context.clip();
+
             this.context.drawImage(
                 this.scanvas,
                 -offsetX / highTileRatio,
