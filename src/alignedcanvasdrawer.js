@@ -372,8 +372,8 @@
             console.log("highTile", highTile);
             let highTileRatio = highTile.sourceBounds.width / highTile.size.x;
 
-            const viewPortWidth = this.viewport._containerInnerSize.x;
-            const viewPortHeight = this.viewport._containerInnerSize.y;
+            const viewPortWidth = Math.ceil(this.viewport._containerInnerSize.x * $.pixelDensityRatio);
+            const viewPortHeight = Math.ceil(this.viewport._containerInnerSize.y * $.pixelDensityRatio);
 
             // basically an epsilon in pixels
             // for any border interpolation and such
