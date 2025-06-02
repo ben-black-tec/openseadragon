@@ -444,12 +444,12 @@
                 this.context.globalAlpha = tiledImage.opacity;
             }
             if (this.viewer.viewport.getFlip()) {
-                this._getCanvasCenter();
+                const flipPoint = this._getCanvasCenter();
                 var context = this.context;
 
-                context.translate(point.x, 0);
+                context.translate(flipPoint.x, 0);
                 context.scale(-1, 1);
-                context.translate(-point.x, 0);
+                context.translate(-flipPoint.x, 0);
             }
             this.context.drawImage(
                 this.scanvas,
@@ -649,9 +649,9 @@
 
         // private
         _offsetForRotation(options) {
-            var point = options.point
-                ? options.point.times($.pixelDensityRatio)
-                : this._getCanvasCenter();
+            var point = options.point ?
+                options.point.times($.pixelDensityRatio) :
+                this._getCanvasCenter();
 
             var context = this.context;
             context.save();
@@ -664,9 +664,9 @@
         // private
         _flip(options) {
             options = options || {};
-            var point = options.point
-                ? options.point.times($.pixelDensityRatio)
-                : this._getCanvasCenter();
+            var point = options.point ?
+                options.point.times($.pixelDensityRatio) :
+                this._getCanvasCenter();
             var context = this.context;
 
             context.translate(point.x, 0);
