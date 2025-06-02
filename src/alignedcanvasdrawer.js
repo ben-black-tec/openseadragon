@@ -269,7 +269,7 @@
         ) {
             const maxDrawScale = Math.max(
                 ...tilesOnLayer.map(
-                    (tile) => tile.size.x * $.pixelDensityRatio / tile.sourceBounds.width
+                    (tile) => tile.size.x / tile.sourceBounds.width
                 )
             );
 
@@ -281,8 +281,8 @@
                 // these should all be basically integers since they just
                 // invert the scaling/translation that has already been applied to the position
                 // to converge back to an integer
-                const dx = tile.position.x * $.pixelDensityRatio * scale + offsetX;
-                const dy = tile.position.y * $.pixelDensityRatio * scale + offsetY;
+                const dx = tile.position.x * scale + offsetX;
+                const dy = tile.position.y * scale + offsetY;
                 const dwidth = tile.sourceBounds.width * maxDrawScale * scale;
                 const dheight = tile.sourceBounds.height * maxDrawScale * scale;
                 // rounding them to exact integers to allow the code to take
@@ -370,7 +370,7 @@
                 (tile) => tile.level === highestLevel
             )[0];
             console.log("highTile", highTile);
-            let highTileRatio = highTile.sourceBounds.width / (highTile.size.x * $.pixelDensityRatio);
+            let highTileRatio = highTile.sourceBounds.width / highTile.size.x;
 
             const viewPortWidth = this.viewport._containerInnerSize.x;
             const viewPortHeight = this.viewport._containerInnerSize.y;
@@ -379,8 +379,8 @@
             // for any border interpolation and such
             let roundingSpace = 8;
 
-            const adjViewPortWidth = highTileRatio * viewPortWidth * $.pixelDensityRatio;
-            const adjViewPortHeight = highTileRatio * viewPortHeight * $.pixelDensityRatio;
+            const adjViewPortWidth = highTileRatio * viewPortWidth;
+            const adjViewPortHeight = highTileRatio * viewPortHeight;
             if (this.viewport.getRotation(true) % 360 !== 0) {
                 // can get much more accurate sizes with trigonometry
                 // but we really aren't using the empty space on the canvas
@@ -400,10 +400,10 @@
             let viewportSizeY = highTileRatio * viewPortHeight + roundingSpace;
             // this forces tiles to be drawn on integer boundaries while the end image still draws on sub-pixel boundaries
             const offsetX =
-                -((highTile.position.x * $.pixelDensityRatio * highTileRatio) % 1) +
+                -((highTile.position.x * highTileRatio) % 1) +
                 Math.round(roundingSpace / 2);
             const offsetY =
-                -((highTile.position.y * $.pixelDensityRatio * highTileRatio) % 1) +
+                -((highTile.position.y * highTileRatio) % 1) +
                 Math.round(roundingSpace / 2);
 
             if (
@@ -458,11 +458,13 @@
             }
             if (this.viewer.viewport.getFlip()) {
                 const flipPoint = this._getCanvasCenter();
-                var context = this.context;
 
-                context.translate(flipPoint.x, 0);
-                context.scale(-1, 1);
-                context.translate(-flipPoint.x, 0);
+                this.context.translate(flipPoint.x, 0);
+                this.context.scale(-1, 1);
+                this.context.translate(-flipPoint.x, 0);
+            }
+            if($.pixelDensityRatio !== 1){
+                this.context.scale($.pixelDensityRatio, $.pixelDensityRatio);
             }
             // TODO: right now we are overwriting too much data if there
             // are multipled tiledImages, this should be re-done to only
