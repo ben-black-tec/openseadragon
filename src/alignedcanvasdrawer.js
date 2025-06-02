@@ -437,6 +437,18 @@
             // save context state for rotations/opacity/flip modifications
             this.context.save();
             const degrees = this.viewport.getRotation(true) % 360;
+            // scale first since the other operations work in viewport space rather than scanvas space
+            if($.pixelDensityRatio !== 1){
+                this.context.scale($.pixelDensityRatio, $.pixelDensityRatio);
+            }
+
+            // clips drawing area to specific tiledimage
+            // important for overlapping regions to be drawn correctly
+            this.context.beginPath();
+            const rect = this.viewport.viewportToViewerElementRectangle(tiledImage.getClippedBounds(true));
+            this.context.rect(rect.x, rect.y, rect.width, rect.height);
+            this.context.clip();
+
             if (degrees !== 0) {
                 const point = this._getCanvasCenter();
 
@@ -454,15 +466,6 @@
                 this.context.scale(-1, 1);
                 this.context.translate(-flipPoint.x, 0);
             }
-            if($.pixelDensityRatio !== 1){
-                this.context.scale($.pixelDensityRatio, $.pixelDensityRatio);
-            }
-            // clips drawing area to specific tiledimage
-            // important for overlapping regions to be drawn correctly
-            this.context.beginPath();
-            const rect = this.viewport.viewportToViewerElementRectangle(tiledImage.getClippedBounds(true));
-            this.context.rect(rect.x, rect.y, rect.width, rect.height);
-            this.context.clip();
 
             this.context.drawImage(
                 this.scanvas,
