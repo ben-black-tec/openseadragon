@@ -379,8 +379,8 @@
             // for any border interpolation and such
             let roundingSpace = 8;
 
-            const adjViewPortWidth = highTileRatio * viewPortWidth;
-            const adjViewPortHeight = highTileRatio * viewPortHeight;
+            const adjViewPortWidth = highTileRatio * viewPortWidth * $.pixelDensityRatio;
+            const adjViewPortHeight = highTileRatio * viewPortHeight * $.pixelDensityRatio;
             if (this.viewport.getRotation(true) % 360 !== 0) {
                 // can get much more accurate sizes with trigonometry
                 // but we really aren't using the empty space on the canvas
