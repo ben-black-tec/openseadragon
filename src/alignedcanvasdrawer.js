@@ -436,10 +436,25 @@
             }
             // save context state for rotations/opacity/flip modifications
             this.context.save();
-            const degrees = this.viewport.getRotation(true) % 360;
             // scale first since the other operations work in viewport space rather than scanvas space
             if($.pixelDensityRatio !== 1){
                 this.context.scale($.pixelDensityRatio, $.pixelDensityRatio);
+            }
+            // rotate next
+            const degrees = this.viewport.getRotation(true) % 360;
+            if (degrees !== 0) {
+                const point = this._getCanvasCenter();
+
+                this.context.translate(point.x, point.y);
+                this.context.rotate((Math.PI / 180) * degrees);
+                this.context.translate(-point.x, -point.y);
+            }
+            if (this.viewer.viewport.getFlip()) {
+                const flipPoint = this._getCanvasCenter();
+
+                this.context.translate(flipPoint.x, 0);
+                this.context.scale(-1, 1);
+                this.context.translate(-flipPoint.x, 0);
             }
 
             // clips drawing area to specific tiledimage
@@ -449,22 +464,8 @@
             this.context.rect(rect.x, rect.y, rect.width, rect.height);
             this.context.clip();
 
-            if (degrees !== 0) {
-                const point = this._getCanvasCenter();
-
-                this.context.translate(point.x, point.y);
-                this.context.rotate((Math.PI / 180) * degrees);
-                this.context.translate(-point.x, -point.y);
-            }
             if (tiledImage.opacity && tiledImage.opacity < 1) {
                 this.context.globalAlpha = tiledImage.opacity;
-            }
-            if (this.viewer.viewport.getFlip()) {
-                const flipPoint = this._getCanvasCenter();
-
-                this.context.translate(flipPoint.x, 0);
-                this.context.scale(-1, 1);
-                this.context.translate(-flipPoint.x, 0);
             }
 
             this.context.drawImage(
