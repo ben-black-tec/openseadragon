@@ -369,7 +369,6 @@
             let highTile = tilesToDraw.filter(
                 (tile) => tile.level === highestLevel
             )[0];
-            console.log("highTile", highTile);
             let highTileRatio = highTile.sourceBounds.width / highTile.size.x;
 
             const viewPortWidth = this.viewport._containerInnerSize.x * $.pixelDensityRatio;
