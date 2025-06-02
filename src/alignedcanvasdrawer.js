@@ -437,6 +437,10 @@
             // save context state for rotations/opacity/flip modifications
             this.context.save();
 
+            if($.pixelDensityRatio !== 1){
+                this.context.scale($.pixelDensityRatio, $.pixelDensityRatio);
+            }
+
             // clips drawing area to specific tiledimage
             // important for overlapping regions to be drawn correctly
             this.context.beginPath();
@@ -463,10 +467,6 @@
 
             if (tiledImage.opacity && tiledImage.opacity < 1) {
                 this.context.globalAlpha = tiledImage.opacity;
-            }
-
-            if($.pixelDensityRatio !== 1){
-                this.context.scale($.pixelDensityRatio, $.pixelDensityRatio);
             }
 
             this.context.drawImage(
