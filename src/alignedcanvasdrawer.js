@@ -267,6 +267,7 @@
             offsetY,
             tiledImage
         ) {
+            console.log(tile);
             const maxDrawScale = Math.max(
                 ...tilesOnLayer.map(
                     (tile) => tile.size.x / tile.sourceBounds.width
