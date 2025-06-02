@@ -92,7 +92,7 @@
         }
 
         getSupportedDataFormats() {
-            return ["context2d", "image"];
+            return ["image"];
         }
 
         /**
