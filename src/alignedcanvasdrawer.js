@@ -345,7 +345,19 @@
             ) {
                 return;
             }
-            console.log("tilesToDraw", tilesToDraw);
+            else if (lastDrawn.length === 0){
+                // TODO: right now we are overwriting too much data if there
+                // are multipled tiledImages, this should be re-done to only
+                // draw within scope of tiledimage
+                this.context.fillStyle = tiledImage.placeholderFillStyle;
+                this.context.fillRect(
+                    0,
+                    0,
+                    this.scanvas.width,
+                    this.scanvas.height
+                );
+                return;
+            }
 
             let levelSet = Array.from(
                 new Set(tilesToDraw.map((tile) => tile.level))
@@ -411,8 +423,7 @@
                     Math.ceil(viewportSizeY)
                 );
             }
-
-            this.scontext.fillStyle = "white";
+            this.scontext.fillStyle = tiledImage.placeholderFillStyle;
             this.scontext.fillRect(
                 0,
                 0,
@@ -453,6 +464,9 @@
                 context.scale(-1, 1);
                 context.translate(-flipPoint.x, 0);
             }
+            // TODO: right now we are overwriting too much data if there
+            // are multipled tiledImages, this should be re-done to only
+            // draw within scope of tiledimage
             this.context.drawImage(
                 this.scanvas,
                 -offsetX / highTileRatio,
