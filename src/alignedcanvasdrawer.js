@@ -704,9 +704,9 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
 
     // private
     _offsetForRotation(options) {
-        var point = options.point
-            ? options.point.times($.pixelDensityRatio)
-            : this._getCanvasCenter();
+        var point = options.point ?
+            options.point.times($.pixelDensityRatio) :
+            this._getCanvasCenter();
 
         var context = this.context;
         context.save();
@@ -719,9 +719,9 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
     // private
     _flip(options) {
         options = options || {};
-        var point = options.point
-            ? options.point.times($.pixelDensityRatio)
-            : this._getCanvasCenter();
+        var point = options.point ?
+            options.point.times($.pixelDensityRatio) :
+            this._getCanvasCenter();
         var context = this.context;
 
         context.translate(point.x, 0);
