@@ -142,9 +142,18 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
             let highestLevel = levelSet[levelSet.length - 1];
             let highTile = allTiles.filter(
                 (tile) => tile.level === highestLevel
-            )[0];
-            let highTileRatio =
-                highTile.sourceBounds.width / highTile.size.x;
+            ).reduce((curHighTile, newTile) => {
+                const curHighTileRatio = curHighTile.sourceBounds.width / curHighTile.size.x;
+                const newHighTileRatio = newTile.sourceBounds.width / newTile.size.x;
+                if (curHighTileRatio >= newHighTileRatio) {
+                    return curHighTile;
+                }
+                else{
+                    return newTile;
+                }
+            }, allTiles[0]);
+
+            let highTileRatio = highTile.sourceBounds.width / highTile.size.x;
 
             const viewPortWidth =
                 this.viewport._containerInnerSize.x * $.pixelDensityRatio;
