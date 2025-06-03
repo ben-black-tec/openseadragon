@@ -152,6 +152,7 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
                     return newTile;
                 }
             }, allTiles[0]);
+            console.log(highTile);
 
             let highTileRatio = highTile.sourceBounds.width / highTile.size.x;
 
