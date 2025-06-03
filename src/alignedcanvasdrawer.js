@@ -744,4 +744,5 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
         };
     }
 }
+$.AlignedCanvasDrawer = AlignedCanvasDrawer;
 })(OpenSeadragon);
