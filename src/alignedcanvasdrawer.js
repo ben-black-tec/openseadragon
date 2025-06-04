@@ -138,11 +138,8 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
             );
             levelSet.sort((a, b) => +a - +b);
 
-            // canvas will be drawn at a 1-1 pixel ratio with the highest zoom level
-            let highestLevel = levelSet[levelSet.length - 1];
-            let highTile = allTiles.filter(
-                (tile) => tile.level === highestLevel
-            ).reduce((curHighTile, newTile) => {
+            // canvas will be drawn at a 1-1 pixel ratio with the highest resolution image
+            let highTile = allTiles.reduce((curHighTile, newTile) => {
                 const curHighTileRatio = curHighTile.sourceBounds.width / curHighTile.size.x;
                 const newHighTileRatio = newTile.sourceBounds.width / newTile.size.x;
                 if (curHighTileRatio >= newHighTileRatio) {
@@ -152,7 +149,6 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
                     return newTile;
                 }
             }, allTiles[0]);
-            console.log(highTile);
 
             let highTileRatio = highTile.sourceBounds.width / highTile.size.x;
 
