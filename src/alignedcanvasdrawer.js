@@ -508,6 +508,10 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
                     tile
                 );
             }
+            this.scontext.save()
+            if (tile.opacity && tile.opacity !== 0) {
+                this.scontext.globalAlpha = tile.opacity;
+            }
             this.scontext.drawImage(
                 rendered,
                 0,
@@ -520,6 +524,7 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
                 rdwidth,
                 rdheight
             );
+            this.scontext.restore();
         }
     }
 
