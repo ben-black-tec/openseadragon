@@ -210,6 +210,7 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
             // draws basic background at the whole context level
             // only draw tiled-image specific
             this.scontext.fillStyle = this.viewer.background;
+            console.log("this.viewer.background:", this.viewer.background);
             this.scontext.fillRect(
                 0,
                 0,
@@ -232,6 +233,8 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
                 const sheight = viewPortRect2.height * highTileRatio;
 
                 this.scontext.fillStyle = tiledImage.placeholderFillStyle || $.DEFAULT_SETTINGS.placeholderFillStyle;
+                console.log(tiledImage.placeholderFillStyle);
+                console.log("tiledImage.placeholderFillStyle:", tiledImage.placeholderFillStyle);
                 this.scontext.fillRect(Math.ceil(sx), Math.ceil(sy), Math.floor(swidth), Math.floor(sheight));
             }
 
