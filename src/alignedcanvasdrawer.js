@@ -230,6 +230,31 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
                     );
                 }
             }
+            this.scontext.fillStyle = this.viewer.background;
+            this.scontext.fillRect(
+                0,
+                0,
+                1,
+                this.scanvas.height
+            );
+            this.scontext.fillRect(
+                0,
+                0,
+                this.scanvas.width,
+                1
+            );
+            this.scontext.fillRect(
+                this.scanvas.width-1,
+                0,
+                1,
+                this.scanvas.height
+            );
+            this.scontext.fillRect(
+                0,
+                this.scanvas.height-1,
+                this.scanvas.width,
+                1
+            );
 
             // save context state for rotations/opacity/flip modifications
             // note that operations are applied in reverse order of intutive operations
