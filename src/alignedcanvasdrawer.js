@@ -208,7 +208,7 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
                 );
             }
             // draws basic background at the whole context level
-            // only draw tiled-image specific background on specific level
+            // only draw tiled-image specific
             this.scontext.fillStyle = this.viewer.background;
             this.scontext.fillRect(
                 0,
@@ -216,6 +216,24 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
                 this.scanvas.width,
                 this.scanvas.height
             );
+            // fill in background colors behind tiledimages
+            for (const idx in tiledImages) {
+                const tiledImage = tiledImages[idx];
+                const imageTiles = imageTilesList[idx];
+                const baseRect2 = tiledImage.getBoundsNoRotate(true);
+                const viewPortRect2 = $.Rect.fromSummits(
+                    this.viewport.pixelFromPointNoRotate(baseRect2.getTopLeft(), true),
+                    this.viewport.pixelFromPointNoRotate(baseRect2.getTopRight(), true),
+                    this.viewport.pixelFromPointNoRotate(baseRect2.getBottomLeft(), true)
+                );
+                const sx = viewPortRect2.x * highTileRatio + offsetX
+                const sy = viewPortRect2.y * highTileRatio + offsetY
+                const swidth = viewPortRect2.width * highTileRatio
+                const sheight = viewPortRect2.height * highTileRatio
+
+                this.scontext.fillStyle = tiledImage.placeholderFillStyle || $.DEFAULT_SETTINGS.placeholderFillStyle;
+                this.scontext.fillRect(sx, sy, swidth, sheight);
+            }
 
             for (const idx in tiledImages) {
                 const tiledImage = tiledImages[idx];
@@ -255,36 +273,20 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
                 this.context.globalAlpha = tiledImage.opacity;
             }
 
-            // if ($.pixelDensityRatio !== 1) {
-            //     this.context.scale(
-            //         $.pixelDensityRatio,
-            //         $.pixelDensityRatio
-            //     );
-            // }
-            // for(const tiledImage of tiledImages){
-            //     if(tiledImage.)
-            //     // clips drawing area to specific tiledimage
-            //     // important for overlapping regions to be drawn correctly
-            //     const baseRect = tiledImage.getBoundsNoRotate(true);
-            //     const viewPortRect = $.Rect.fromSummits(
-            //         this.viewport.pixelFromPointNoRotate(baseRect.getTopLeft(), true),
-            //         this.viewport.pixelFromPointNoRotate(baseRect.getTopRight(), true),
-            //         this.viewport.pixelFromPointNoRotate(baseRect.getBottomLeft(), true)
-            //     );
-            //     this.context.beginPath();
-            //     // const rect = this.viewport.viewportToViewerElementRectangle(tiledImage.getBoundsNoRotate(true));
-            //     this.context.rect(viewPortRect.x, viewPortRect.y, viewPortRect.width, viewPortRect.height);
-            //     this.context.clip();
+            if ($.pixelDensityRatio !== 1) {
+                this.context.scale(
+                    $.pixelDensityRatio,
+                    $.pixelDensityRatio
+                );
+            }
 
             this.context.drawImage(
                 this.scanvas,
-                Math.round(-offsetX / highTileRatio * $.pixelDensityRatio),
-                Math.round(-offsetY / highTileRatio * $.pixelDensityRatio),
-                Math.round(this.scanvas.width / highTileRatio * $.pixelDensityRatio),
-                Math.round(this.scanvas.height / highTileRatio * $.pixelDensityRatio)
+                -offsetX / highTileRatio,
+                -offsetY / highTileRatio,
+                this.scanvas.width / highTileRatio,
+                this.scanvas.height / highTileRatio
             );
-
-            // }
             this.context.restore();
         }
 
@@ -428,6 +430,7 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
             this.canvas.width = viewportSize.x;
             this.canvas.height = viewportSize.y;
         }
+        // this._clear();
     }
 
     _roundIfNearInt(x) {
