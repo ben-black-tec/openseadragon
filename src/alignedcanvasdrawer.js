@@ -69,7 +69,7 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
          * @memberof OpenSeadragon.AlignedCanvasDrawer#
          * @private
          */
-        this.context = this.canvas.getContext("2d");
+        this.context = this.canvas.getContext("2d", {alpha: false});
         this.scanvas = document.createElement("canvas");
         this.scontext = this.scanvas.getContext("2d");
 
@@ -116,15 +116,15 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
         this._prepareNewFrame(); // prepare to draw a new frame
         // if (tiledImages.length) {
             // background color. Should be the same placeholderFillStyle for all tiledImages
-            this.context.fillStyle = 'black';
+            // this.context.fillStyle = 'black';
                 // tiledImages[0].placeholderFillStyle ||
                 // $.DEFAULT_SETTINGS.placeholderFillStyle;
-        this.context.fillRect(
-            0,
-            0,
-            this.canvas.width,
-            this.canvas.height
-        );
+        // this.context.fillRect(
+        //     0,
+        //     0,
+        //     this.canvas.width,
+        //     this.canvas.height
+        // );
         // }
         const imageTilesList = tiledImages.map((tiledImage) =>
             tiledImage.getTilesToDraw().map((info) => info.tile)
