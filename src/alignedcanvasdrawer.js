@@ -203,6 +203,7 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
                 this.scanvas.width < viewportSizeX ||
                 this.scanvas.height < viewportSizeY
             ) {
+                console.log(`Growing canvas size from size (${this.scanvas.width}, ${this.scanvas.height}) to size (${Math.ceil(viewportSizeX)}, ${Math.ceil(viewportSizeY)})`);
                 // only grow canvas size so that we minimize canvas memory re-allocations (always triggers major GC)
                 this.scanvas.style.width = "";
                 this.scanvas.style.height = "";
