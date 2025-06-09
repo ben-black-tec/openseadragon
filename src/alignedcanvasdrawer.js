@@ -219,7 +219,7 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
             // only draw tiled-image specific
             if(this.viewer && this.viewer.background){
                 this.scontext.fillStyle = this.viewer.background;
-                console.log("this.viewer.background:", this.viewer.background);
+                // console.log("this.viewer.background:", this.viewer.background);
                 this.scontext.fillRect(
                     0,
                     0,
@@ -251,10 +251,10 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
                 const sheight = viewPortRect2.height * highTileRatio;
 
                 this.scontext.fillStyle = tiledImage.placeholderFillStyle || $.DEFAULT_SETTINGS.placeholderFillStyle;
-                console.log(tiledImage.placeholderFillStyle);
-                console.log("tiledImage.placeholderFillStyle:", tiledImage.placeholderFillStyle);
-                console.log(Math.ceil(sx), Math.ceil(sy), Math.floor(swidth), Math.floor(sheight));
-                console.log((sx), (sy), (swidth), (sheight));
+                // console.log(tiledImage.placeholderFillStyle);
+                // console.log("tiledImage.placeholderFillStyle:", tiledImage.placeholderFillStyle);
+                // console.log(Math.ceil(sx), Math.ceil(sy), Math.floor(swidth), Math.floor(sheight));
+                // console.log((sx), (sy), (swidth), (sheight));
                 const sxroundoff = Math.ceil(sx) - sx;
                 const syroundoff = Math.ceil(sy) - sy;
                 this.scontext.fillRect(Math.ceil(sx), Math.ceil(sy), Math.floor(swidth - sxroundoff), Math.floor(sheight - syroundoff));
