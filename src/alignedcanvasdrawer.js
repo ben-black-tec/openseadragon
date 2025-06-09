@@ -114,18 +114,18 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
      */
     draw(tiledImages) {
         this._prepareNewFrame(); // prepare to draw a new frame
-        if (tiledImages.length) {
+        // if (tiledImages.length) {
             // background color. Should be the same placeholderFillStyle for all tiledImages
-            this.context.fillStyle =
-                tiledImages[0].placeholderFillStyle ||
-                $.DEFAULT_SETTINGS.placeholderFillStyle;
-            this.context.fillRect(
-                0,
-                0,
-                this.canvas.width,
-                this.canvas.height
-            );
-        }
+            // this.context.fillStyle =
+            //     tiledImages[0].placeholderFillStyle ||
+            //     $.DEFAULT_SETTINGS.placeholderFillStyle;
+        // this.context.clearRect(
+        //     0,
+        //     0,
+        //     this.canvas.width,
+        //     this.canvas.height
+        // );
+        // }
         const imageTilesList = tiledImages.map((tiledImage) =>
             tiledImage.getTilesToDraw().map((info) => info.tile)
         );
