@@ -244,14 +244,14 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
                 1
             );
             this.scontext.fillRect(
-                this.scanvas.width-1,
+                this.scanvas.width - 1,
                 0,
                 1,
                 this.scanvas.height
             );
             this.scontext.fillRect(
                 0,
-                this.scanvas.height-1,
+                this.scanvas.height - 1,
                 this.scanvas.width,
                 1
             );
