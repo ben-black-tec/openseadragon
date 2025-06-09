@@ -186,10 +186,10 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
             // this forces tiles to be drawn on integer boundaries while the end image still draws on sub-pixel boundaries
             const offsetX =
                 -((highTile.position.x * highTileRatio) % 1) +
-                Math.round(roundingSpace / 2);
+                Math.round(roundingSpace / 2 + 0.1);
             const offsetY =
                 -((highTile.position.y * highTileRatio) % 1) +
-                Math.round(roundingSpace / 2);
+                Math.round(roundingSpace / 2 + 0.1);
 
             if (
                 this.scanvas.width < viewportSizeX ||
@@ -236,7 +236,8 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
                 console.log(tiledImage.placeholderFillStyle);
                 console.log("tiledImage.placeholderFillStyle:", tiledImage.placeholderFillStyle);
                 console.log(Math.ceil(sx), Math.ceil(sy), Math.floor(swidth), Math.floor(sheight));
-                this.scontext.fillRect(Math.ceil(sx), Math.ceil(sy), Math.floor(swidth), Math.floor(sheight));
+                // this.scontext.fillRect(Math.ceil(sx), Math.ceil(sy), Math.floor(swidth), Math.floor(sheight));
+                this.scontext.fillRect((sx), (sy), (swidth), (sheight));
             }
 
             for (const idx in tiledImages) {
