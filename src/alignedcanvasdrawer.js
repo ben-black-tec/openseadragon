@@ -69,7 +69,7 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
          * @memberof OpenSeadragon.AlignedCanvasDrawer#
          * @private
          */
-        this.context = this.canvas.getContext("2d");
+        this.context = this.canvas.getContext("2d", {alpha: false} );
         this.scanvas = document.createElement("canvas");
         this.scontext = this.scanvas.getContext("2d");
 
@@ -207,9 +207,9 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
                     Math.ceil(viewportSizeY)
                 );
             }
-            // TODO: consider drawing the base canvas back onto this
-            // temporary canvas to imitate cross-tiledimage transparency
-            this.scontext.fillStyle = tiledImage.placeholderFillStyle;
+            // draws basic background at the whole context level
+            // only draw tiled-image specific background on specific level
+            this.context.fillStyle = this.viewer.background;
             this.scontext.fillRect(
                 0,
                 0,
@@ -413,26 +413,6 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
             this.canvas.height = viewportSize.y;
         }
         // this._clear();
-    }
-
-    /**
-     * @private
-     * @param {Boolean} useSketch Whether to clear sketch canvas or main canvas
-     * @param {OpenSeadragon.Rect} [bounds] The rectangle to clear
-     */
-    _clear(bounds) {
-        var context = this.context;
-        if (bounds) {
-            context.clearRect(
-                bounds.x,
-                bounds.y,
-                bounds.width,
-                bounds.height
-            );
-        } else {
-            var canvas = context.canvas;
-            context.clearRect(0, 0, canvas.width, canvas.height);
-        }
     }
 
     _roundIfNearInt(x) {
