@@ -116,16 +116,17 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
         this._prepareNewFrame(); // prepare to draw a new frame
         // if (tiledImages.length) {
             // background color. Should be the same placeholderFillStyle for all tiledImages
-            // this.context.fillStyle = 'black';
-                // tiledImages[0].placeholderFillStyle ||
-                // $.DEFAULT_SETTINGS.placeholderFillStyle;
-        // this.context.fillRect(
-        //     0,
-        //     0,
-        //     this.canvas.width,
-        //     this.canvas.height
-        // );
-        // }
+        if(this.viewer){
+            this.context.fillStyle = this.viewer.background;
+                    // tiledImages[0].placeholderFillStyle ||
+                    // $.DEFAULT_SETTINGS.placeholderFillStyle;
+            this.context.fillRect(
+                0,
+                0,
+                this.canvas.width,
+                this.canvas.height
+            );
+        }
         const imageTilesList = tiledImages.map((tiledImage) =>
             tiledImage.getTilesToDraw().map((info) => info.tile)
         );
@@ -411,7 +412,7 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
             this.canvas.width = viewportSize.x;
             this.canvas.height = viewportSize.y;
         }
-        this._clear();
+        // this._clear();
     }
 
     /**
