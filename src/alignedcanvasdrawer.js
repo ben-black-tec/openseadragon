@@ -255,8 +255,10 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
                 console.log("tiledImage.placeholderFillStyle:", tiledImage.placeholderFillStyle);
                 console.log(Math.ceil(sx), Math.ceil(sy), Math.floor(swidth), Math.floor(sheight));
                 console.log((sx), (sy), (swidth), (sheight));
-                // this.scontext.fillRect(Math.ceil(sx), Math.ceil(sy), Math.floor(swidth), Math.floor(sheight));
-                this.scontext.fillRect((sx), (sy), (swidth), (sheight));
+                const sxroundoff = Math.ceil(sx) - sx
+                const syroundoff = Math.ceil(sy) - sy
+                this.scontext.fillRect(Math.ceil(sx), Math.ceil(sy), Math.floor(swidth - sxroundoff), Math.floor(sheight - syroundoff));
+                // this.scontext.fillRect((sx), (sy), (swidth), (sheight));
             }
 
             for (const idx in tiledImages) {
