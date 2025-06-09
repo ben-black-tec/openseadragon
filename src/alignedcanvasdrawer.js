@@ -71,7 +71,7 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
          */
         this.context = this.canvas.getContext("2d", {alpha: false} );
         this.scanvas = document.createElement("canvas");
-        this.scontext = this.scanvas.getContext("2d");
+        this.scontext = this.scanvas.getContext("2d", {alpha: false});
 
         // Image smoothing for canvas rendering (only if canvas is used).
         // Canvas default is "true", so this will only be changed if user specifies "false" in the options or via setImageSmoothinEnabled.
@@ -412,7 +412,6 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
             this.canvas.width = viewportSize.x;
             this.canvas.height = viewportSize.y;
         }
-        // this._clear();
     }
 
     _roundIfNearInt(x) {
