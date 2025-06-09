@@ -261,32 +261,29 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
                     $.pixelDensityRatio
                 );
             }
-            for (const idx in tiledImages) {
-                const tiledImage = tiledImages[idx];
-                const imageTiles = imageTilesList[idx];
-                if (tiledImage.opacity !== 0 && imageTiles.length) {
-                    // clips drawing area to specific tiledimage
-                    // important for overlapping regions to be drawn correctly
-                    const baseRect = tiledImage.getBoundsNoRotate(true);
-                    const viewPortRect = $.Rect.fromSummits(
-                        this.viewport.pixelFromPointNoRotate(baseRect.getTopLeft(), true),
-                        this.viewport.pixelFromPointNoRotate(baseRect.getTopRight(), true),
-                        this.viewport.pixelFromPointNoRotate(baseRect.getBottomLeft(), true)
-                    );
-                    this.context.beginPath();
-                    // const rect = this.viewport.viewportToViewerElementRectangle(tiledImage.getBoundsNoRotate(true));
-                    this.context.rect(viewPortRect.x, viewPortRect.y, viewPortRect.width, viewPortRect.height);
-                    this.context.clip();
+            // for(const tiledImage of tiledImages){
+            //     if(tiledImage.)
+            //     // clips drawing area to specific tiledimage
+            //     // important for overlapping regions to be drawn correctly
+            //     const baseRect = tiledImage.getBoundsNoRotate(true);
+            //     const viewPortRect = $.Rect.fromSummits(
+            //         this.viewport.pixelFromPointNoRotate(baseRect.getTopLeft(), true),
+            //         this.viewport.pixelFromPointNoRotate(baseRect.getTopRight(), true),
+            //         this.viewport.pixelFromPointNoRotate(baseRect.getBottomLeft(), true)
+            //     );
+            //     this.context.beginPath();
+            //     // const rect = this.viewport.viewportToViewerElementRectangle(tiledImage.getBoundsNoRotate(true));
+            //     this.context.rect(viewPortRect.x, viewPortRect.y, viewPortRect.width, viewPortRect.height);
+            //     this.context.clip();
 
-                    this.context.drawImage(
-                        this.scanvas,
-                        -offsetX / highTileRatio,
-                        -offsetY / highTileRatio,
-                        this.scanvas.width / highTileRatio,
-                        this.scanvas.height / highTileRatio
-                    );
-                }
-            }
+            this.context.drawImage(
+                this.scanvas,
+                Math.round(-offsetX / highTileRatio),
+                Math.round(-offsetY / highTileRatio),
+                Math.round(this.scanvas.width / highTileRatio),
+                Math.round(this.scanvas.height / highTileRatio)
+            );
+            // }
             this.context.restore();
         }
 
