@@ -116,11 +116,19 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
         this._prepareNewFrame(); // prepare to draw a new frame
         // if (tiledImages.length) {
             // background color. Should be the same placeholderFillStyle for all tiledImages
-        if(this.viewer){
-            this.context.fillStyle = this.viewer.background || 'rgba(0,0,0,0)';
+        if(this.viewer && this.viewer.background){
+            this.context.fillStyle = this.viewer.background;
                     // tiledImages[0].placeholderFillStyle ||
                     // $.DEFAULT_SETTINGS.placeholderFillStyle;
             this.context.fillRect(
+                0,
+                0,
+                this.canvas.width,
+                this.canvas.height
+            );
+        }
+        else {
+            this.context.clearRect(
                 0,
                 0,
                 this.canvas.width,
@@ -209,14 +217,24 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
             }
             // draws basic background at the whole context level
             // only draw tiled-image specific
-            this.scontext.fillStyle = this.viewer.background || "rgba(0,0,0,0)";
-            console.log("this.viewer.background:", this.viewer.background);
-            this.scontext.fillRect(
-                0,
-                0,
-                this.scanvas.width,
-                this.scanvas.height
-            );
+            if(this.viewer && this.viewer.background){
+                this.scontext.fillStyle = this.viewer.background;
+                console.log("this.viewer.background:", this.viewer.background);
+                this.scontext.fillRect(
+                    0,
+                    0,
+                    this.scanvas.width,
+                    this.scanvas.height
+                );
+            }
+            else {
+                this.scontext.clearRect(
+                    0,
+                    0,
+                    this.scanvas.width,
+                    this.scanvas.height
+                );
+            }
             // fill in background colors behind tiledimages
             for (const idx in tiledImages) {
                 const tiledImage = tiledImages[idx];
