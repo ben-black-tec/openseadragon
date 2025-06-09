@@ -209,7 +209,7 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
             }
             // draws basic background at the whole context level
             // only draw tiled-image specific background on specific level
-            this.context.fillStyle = this.viewer.background;
+            this.scontext.fillStyle = this.viewer.background;
             this.scontext.fillRect(
                 0,
                 0,
