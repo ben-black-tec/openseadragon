@@ -117,7 +117,7 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
         // if (tiledImages.length) {
             // background color. Should be the same placeholderFillStyle for all tiledImages
         if(this.viewer){
-            this.context.fillStyle = this.viewer.background;
+            this.context.fillStyle = this.viewer.background ?? 'rgba(0,0,0,0)';
                     // tiledImages[0].placeholderFillStyle ||
                     // $.DEFAULT_SETTINGS.placeholderFillStyle;
             this.context.fillRect(
@@ -160,7 +160,7 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
 
             // basically an epsilon in pixels
             // for any border interpolation and such
-            let roundingSpace = 8;
+            let roundingSpace = 128;
 
             const adjViewPortWidth = highTileRatio * viewPortWidth;
             const adjViewPortHeight = highTileRatio * viewPortHeight;
@@ -209,7 +209,7 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
             }
             // draws basic background at the whole context level
             // only draw tiled-image specific
-            this.scontext.fillStyle = this.viewer.background;
+            this.scontext.fillStyle = this.viewer.background ?? "rgba(0,0,0,0)";
             console.log("this.viewer.background:", this.viewer.background);
             this.scontext.fillRect(
                 0,
@@ -235,6 +235,7 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
                 this.scontext.fillStyle = tiledImage.placeholderFillStyle || $.DEFAULT_SETTINGS.placeholderFillStyle;
                 console.log(tiledImage.placeholderFillStyle);
                 console.log("tiledImage.placeholderFillStyle:", tiledImage.placeholderFillStyle);
+                console.log(Math.ceil(sx), Math.ceil(sy), Math.floor(swidth), Math.floor(sheight));
                 this.scontext.fillRect(Math.ceil(sx), Math.ceil(sy), Math.floor(swidth), Math.floor(sheight));
             }
 
