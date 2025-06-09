@@ -255,12 +255,12 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
                 this.context.globalAlpha = tiledImage.opacity;
             }
 
-            if ($.pixelDensityRatio !== 1) {
-                this.context.scale(
-                    $.pixelDensityRatio,
-                    $.pixelDensityRatio
-                );
-            }
+            // if ($.pixelDensityRatio !== 1) {
+            //     this.context.scale(
+            //         $.pixelDensityRatio,
+            //         $.pixelDensityRatio
+            //     );
+            // }
             // for(const tiledImage of tiledImages){
             //     if(tiledImage.)
             //     // clips drawing area to specific tiledimage
@@ -278,10 +278,10 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
 
             this.context.drawImage(
                 this.scanvas,
-                Math.round(-offsetX / highTileRatio),
-                Math.round(-offsetY / highTileRatio),
-                Math.round(this.scanvas.width / highTileRatio),
-                Math.round(this.scanvas.height / highTileRatio)
+                Math.round(-offsetX / highTileRatio * $.pixelDensityRatio),
+                Math.round(-offsetY / highTileRatio * $.pixelDensityRatio),
+                Math.round(this.scanvas.width / highTileRatio * $.pixelDensityRatio),
+                Math.round(this.scanvas.height / highTileRatio * $.pixelDensityRatio)
             );
             // }
             this.context.restore();
