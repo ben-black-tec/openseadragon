@@ -232,7 +232,7 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
                 const sheight = viewPortRect2.height * highTileRatio;
 
                 this.scontext.fillStyle = tiledImage.placeholderFillStyle || $.DEFAULT_SETTINGS.placeholderFillStyle;
-                this.scontext.fillRect(sx, sy, swidth, sheight);
+                this.scontext.fillRect(Math.ceil(sx), Math.ceil(sy), Math.floor(swidth), Math.floor(sheight));
             }
 
             for (const idx in tiledImages) {
