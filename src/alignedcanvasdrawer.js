@@ -117,7 +117,7 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
         // if (tiledImages.length) {
             // background color. Should be the same placeholderFillStyle for all tiledImages
         if(this.viewer){
-            this.context.fillStyle = this.viewer.background ?? 'rgba(0,0,0,0)';
+            this.context.fillStyle = this.viewer.background || 'rgba(0,0,0,0)';
                     // tiledImages[0].placeholderFillStyle ||
                     // $.DEFAULT_SETTINGS.placeholderFillStyle;
             this.context.fillRect(
@@ -209,7 +209,7 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
             }
             // draws basic background at the whole context level
             // only draw tiled-image specific
-            this.scontext.fillStyle = this.viewer.background ?? "rgba(0,0,0,0)";
+            this.scontext.fillStyle = this.viewer.background || "rgba(0,0,0,0)";
             console.log("this.viewer.background:", this.viewer.background);
             this.scontext.fillRect(
                 0,
