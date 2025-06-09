@@ -219,17 +219,17 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
             // fill in background colors behind tiledimages
             for (const idx in tiledImages) {
                 const tiledImage = tiledImages[idx];
-                const imageTiles = imageTilesList[idx];
+                // const imageTiles = imageTilesList[idx];
                 const baseRect2 = tiledImage.getBoundsNoRotate(true);
                 const viewPortRect2 = $.Rect.fromSummits(
                     this.viewport.pixelFromPointNoRotate(baseRect2.getTopLeft(), true),
                     this.viewport.pixelFromPointNoRotate(baseRect2.getTopRight(), true),
                     this.viewport.pixelFromPointNoRotate(baseRect2.getBottomLeft(), true)
                 );
-                const sx = viewPortRect2.x * highTileRatio + offsetX
-                const sy = viewPortRect2.y * highTileRatio + offsetY
-                const swidth = viewPortRect2.width * highTileRatio
-                const sheight = viewPortRect2.height * highTileRatio
+                const sx = viewPortRect2.x * highTileRatio + offsetX;
+                const sy = viewPortRect2.y * highTileRatio + offsetY;
+                const swidth = viewPortRect2.width * highTileRatio;
+                const sheight = viewPortRect2.height * highTileRatio;
 
                 this.scontext.fillStyle = tiledImage.placeholderFillStyle || $.DEFAULT_SETTINGS.placeholderFillStyle;
                 this.scontext.fillRect(sx, sy, swidth, sheight);
