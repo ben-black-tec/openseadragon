@@ -69,7 +69,7 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
          * @memberof OpenSeadragon.AlignedCanvasDrawer#
          * @private
          */
-        this.context = this.canvas.getContext("2d", {alpha: false});
+        this.context = this.canvas.getContext("2d");
         this.scanvas = document.createElement("canvas");
         this.scontext = this.scanvas.getContext("2d");
 
@@ -208,8 +208,8 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
             }
             // TODO: consider drawing the base canvas back onto this
             // temporary canvas to imitate cross-tiledimage transparency
-            this.scontext.fillStyle = tiledImage.placeholderFillStyle;
-            this.scontext.fillRect(
+            // this.scontext.fillStyle = tiledImage.placeholderFillStyle;
+            this.scontext.clearRect(
                 0,
                 0,
                 this.scanvas.width,
