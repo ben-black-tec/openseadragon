@@ -130,7 +130,7 @@ $.TiledImage = function( options ) {
         scale = options.width;
         delete options.width;
 
-        if ( options.height ) {
+        if ( options.height && scale !== options.height / this.normHeight) {
             $.console.error( "specifying both width and height to a tiledImage is not supported" );
             delete options.height;
         }
