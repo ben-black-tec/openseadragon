@@ -442,12 +442,23 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
         );
 
         for (const tile of tilesOnLayer) {
-            const imgRecord = tiledImage._tileCache.getImageRecord(tile.cacheKey);
-            if (!imgRecord) {
-                continue;
+            let rendered;
+            if(tile.context2D){
+                rendered = tile.context2D.canvas
             }
-            const rendered = imgRecord.getData();
+            else if(tile.cacheImageRecord){
+                rendered = tile.cacheImageRecord
+            }
+            else{
+                const imgRecord = tiledImage._tileCache.getImageRecord(tile.cacheKey);
+                if (imgRecord) {
+                    rendered = imgRecord.getData();
+                }
+            }
             if (!rendered) {
+                $.console.warn(
+                    '[Drawer._drawTileToCanvas] attempting to draw tile %s when it\'s not cached',
+                    tile.toString());
                 continue;
             }
             // NOTE: in openseadragon 6+ you should call this inseta
