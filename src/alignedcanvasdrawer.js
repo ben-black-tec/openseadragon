@@ -444,10 +444,10 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
         for (const tile of tilesOnLayer) {
             let rendered;
             if(tile.context2D){
-                rendered = tile.context2D.canvas
+                rendered = tile.context2D.canvas;
             }
             else if(tile.cacheImageRecord){
-                rendered = tile.cacheImageRecord
+                rendered = tile.cacheImageRecord;
             }
             else{
                 const imgRecord = tiledImage._tileCache.getImageRecord(tile.cacheKey);
