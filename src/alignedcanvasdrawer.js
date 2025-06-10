@@ -455,7 +455,6 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
                     rendered = imgRecord.getData();
                 }
             }
-            console.log(rendered);
             if (!rendered) {
                 $.console.warn(
                     '[Drawer._drawTileToCanvas] attempting to draw tile %s when it\'s not cached',
