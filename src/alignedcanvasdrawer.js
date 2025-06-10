@@ -443,7 +443,7 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
 
         for (const tile of tilesOnLayer) {
             let rendered;
-            if(tile.context2D){
+            if(tile.context2D && tile.context2D.canvas){
                 rendered = tile.context2D.canvas;
             }
             else if(tile.cacheImageRecord){
@@ -455,6 +455,7 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
                     rendered = imgRecord.getData();
                 }
             }
+            console.log(rendered);
             if (!rendered) {
                 $.console.warn(
                     '[Drawer._drawTileToCanvas] attempting to draw tile %s when it\'s not cached',
