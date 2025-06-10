@@ -113,28 +113,22 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
      * Draws the TiledImages
      */
     draw(tiledImages) {
-        this._prepareNewFrame(); // prepare to draw a new frame
-        // if (tiledImages.length) {
-            // background color. Should be the same placeholderFillStyle for all tiledImages
-        if(this.viewer && this.viewer.background){
-            this.context.fillStyle = this.viewer.background;
-                    // tiledImages[0].placeholderFillStyle ||
-                    // $.DEFAULT_SETTINGS.placeholderFillStyle;
-            this.context.fillRect(
-                0,
-                0,
-                this.canvas.width,
-                this.canvas.height
-            );
+        var viewportSize = this._calculateCanvasSize();
+        if (
+            this.canvas.width !== viewportSize.x ||
+            this.canvas.height !== viewportSize.y
+        ) {
+            this.canvas.width = viewportSize.x;
+            this.canvas.height = viewportSize.y;
         }
-        else {
-            this.context.clearRect(
-                0,
-                0,
-                this.canvas.width,
-                this.canvas.height
-            );
-        }
+        // sets base canvas to alpha zero
+        // NOTE: alpha zero setting can be janky, watch out
+        this.context.clearRect(
+            0,
+            0,
+            this.canvas.width,
+            this.canvas.height
+        );
         const imageTilesList = tiledImages.map((tiledImage) =>
             tiledImage.getTilesToDraw().map((info) => info.tile)
         );
@@ -203,7 +197,6 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
                 this.scanvas.width < viewportSizeX ||
                 this.scanvas.height < viewportSizeY
             ) {
-                console.log(`Growing canvas size from size (${this.scanvas.width}, ${this.scanvas.height}) to size (${Math.ceil(viewportSizeX)}, ${Math.ceil(viewportSizeY)})`);
                 // only grow canvas size so that we minimize canvas memory re-allocations (always triggers major GC)
                 this.scanvas.style.width = "";
                 this.scanvas.style.height = "";
@@ -216,30 +209,17 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
                     Math.ceil(viewportSizeY)
                 );
             }
-            // draws basic background at the whole context level
-            // only draw tiled-image specific
-            if(this.viewer && this.viewer.background){
-                this.scontext.fillStyle = this.viewer.background;
-                // console.log("this.viewer.background:", this.viewer.background);
-                this.scontext.fillRect(
-                    0,
-                    0,
-                    this.scanvas.width,
-                    this.scanvas.height
-                );
-            }
-            else {
-                this.scontext.clearRect(
-                    0,
-                    0,
-                    this.scanvas.width,
-                    this.scanvas.height
-                );
-            }
+            // clears background context to alpha zero
+            // NOTE: observed janky behavior in certain cases,
+            this.scontext.clearRect(
+                0,
+                0,
+                this.scanvas.width,
+                this.scanvas.height
+            );
             // fill in background colors behind tiledimages
             for (const idx in tiledImages) {
                 const tiledImage = tiledImages[idx];
-                // const imageTiles = imageTilesList[idx];
                 const baseRect2 = tiledImage.getBoundsNoRotate(true);
                 const viewPortRect2 = $.Rect.fromSummits(
                     this.viewport.pixelFromPointNoRotate(baseRect2.getTopLeft(), true),
@@ -252,14 +232,11 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
                 const sheight = viewPortRect2.height * highTileRatio;
 
                 this.scontext.fillStyle = tiledImage.placeholderFillStyle || $.DEFAULT_SETTINGS.placeholderFillStyle;
-                // console.log(tiledImage.placeholderFillStyle);
-                // console.log("tiledImage.placeholderFillStyle:", tiledImage.placeholderFillStyle);
-                // console.log(Math.ceil(sx), Math.ceil(sy), Math.floor(swidth), Math.floor(sheight));
-                // console.log((sx), (sy), (swidth), (sheight));
+                // fill in background on integer boundary within float boundary
+                // to avoid flickering lines and other aliasing artifacts.
                 const sxroundoff = Math.ceil(sx) - sx;
                 const syroundoff = Math.ceil(sy) - sy;
                 this.scontext.fillRect(Math.ceil(sx), Math.ceil(sy), Math.floor(swidth - sxroundoff), Math.floor(sheight - syroundoff));
-                // this.scontext.fillRect((sx), (sy), (swidth), (sheight));
             }
 
             for (const idx in tiledImages) {
@@ -441,23 +418,6 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
             tile: tile,
             rendered: rendered,
         });
-    }
-
-    /**
-     * Clears the Drawer so it's ready to draw another frame.
-     * @private
-     *
-     */
-    _prepareNewFrame() {
-        var viewportSize = this._calculateCanvasSize();
-        if (
-            this.canvas.width !== viewportSize.x ||
-            this.canvas.height !== viewportSize.y
-        ) {
-            this.canvas.width = viewportSize.x;
-            this.canvas.height = viewportSize.y;
-        }
-        // this._clear();
     }
 
     _roundIfNearInt(x) {
