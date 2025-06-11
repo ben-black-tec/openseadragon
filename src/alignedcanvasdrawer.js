@@ -120,7 +120,6 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
         ) {
             this.canvas.width = viewportSize.x;
             this.canvas.height = viewportSize.y;
-            this.viewer.forceRedraw();
         }
         // sets base canvas to alpha zero
         // NOTE: alpha zero setting can be janky, watch out
@@ -167,7 +166,7 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
 
             const adjViewPortWidth = highTileRatio * viewPortWidth;
             const adjViewPortHeight = highTileRatio * viewPortHeight;
-            if (this.viewport.getRotation(true) % 360 !== 0) {
+            if (true || this.viewport.getRotation(true) % 360 !== 0) {
                 // can get much more accurate sizes with trigonometry
                 // but we really aren't using the empty space on the canvas
                 // so it shouldn't be too costly to upper bound
@@ -207,7 +206,6 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
                     this.scanvas.height,
                     viewportSizeY
                 );
-                this.viewer.forceRedraw();
             }
             // clears background context to alpha zero
             // NOTE: observed janky behavior in certain cases,
