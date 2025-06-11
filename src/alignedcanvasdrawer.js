@@ -166,7 +166,7 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
 
             const adjViewPortWidth = highTileRatio * viewPortWidth;
             const adjViewPortHeight = highTileRatio * viewPortHeight;
-            if (true || this.viewport.getRotation(true) % 360 !== 0) {
+            // if (this.viewport.getRotation(true) % 360 !== 0) {
                 // can get much more accurate sizes with trigonometry
                 // but we really aren't using the empty space on the canvas
                 // so it shouldn't be too costly to upper bound
@@ -180,11 +180,11 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
                     sizeCeil - adjViewPortWidth,
                     sizeCeil - adjViewPortHeight
                 );
-            }
+            // }
             let viewportSizeX =
-                Math.ceil(highTileRatio * viewPortWidth + roundingSpace);
+                Math.ceil(adjViewPortWidth + roundingSpace);
             let viewportSizeY =
-                Math.ceil(highTileRatio * viewPortHeight + roundingSpace);
+                Math.ceil(adjViewPortHeight + roundingSpace);
             // this forces tiles to be drawn on integer boundaries while the end image still draws on sub-pixel boundaries
             const offsetX =
                 -((highTile.position.x * highTileRatio) % 1) +
