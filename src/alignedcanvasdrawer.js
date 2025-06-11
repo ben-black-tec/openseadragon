@@ -120,6 +120,7 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
         ) {
             this.canvas.width = viewportSize.x;
             this.canvas.height = viewportSize.y;
+            this.viewer.forceRedraw();
         }
         // sets base canvas to alpha zero
         // NOTE: alpha zero setting can be janky, watch out
@@ -162,7 +163,7 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
 
             // basically an epsilon in pixels
             // for any border interpolation and such
-            let roundingSpace = 128;
+            let roundingSpace = 7;
 
             const adjViewPortWidth = highTileRatio * viewPortWidth;
             const adjViewPortHeight = highTileRatio * viewPortHeight;
@@ -182,9 +183,9 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
                 );
             }
             let viewportSizeX =
-                highTileRatio * viewPortWidth + roundingSpace;
+                Math.ceil(highTileRatio * viewPortWidth + roundingSpace);
             let viewportSizeY =
-                highTileRatio * viewPortHeight + roundingSpace;
+                Math.ceil(highTileRatio * viewPortHeight + roundingSpace);
             // this forces tiles to be drawn on integer boundaries while the end image still draws on sub-pixel boundaries
             const offsetX =
                 -((highTile.position.x * highTileRatio) % 1) +
@@ -198,16 +199,15 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
                 this.scanvas.height < viewportSizeY
             ) {
                 // only grow canvas size so that we minimize canvas memory re-allocations (always triggers major GC)
-                this.scanvas.style.width = "";
-                this.scanvas.style.height = "";
                 this.scanvas.width = Math.max(
                     this.scanvas.width,
-                    Math.ceil(viewportSizeX)
+                    viewportSizeX
                 );
                 this.scanvas.height = Math.max(
                     this.scanvas.height,
-                    Math.ceil(viewportSizeY)
+                    viewportSizeY
                 );
+                this.viewer.forceRedraw();
             }
             // clears background context to alpha zero
             // NOTE: observed janky behavior in certain cases,
