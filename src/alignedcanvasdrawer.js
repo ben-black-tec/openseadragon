@@ -166,6 +166,10 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
 
             const adjViewPortWidth = highTileRatio * viewPortWidth;
             const adjViewPortHeight = highTileRatio * viewPortHeight;
+            // NOTE: this was menat to be a conditional, but frustratingly
+            // it fails under some very specific circumstances which are difficult
+            // to reproduce, not getting a big enough scanvas
+
             // if (this.viewport.getRotation(true) % 360 !== 0) {
                 // can get much more accurate sizes with trigonometry
                 // but we really aren't using the empty space on the canvas
