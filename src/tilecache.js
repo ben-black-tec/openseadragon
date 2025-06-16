@@ -253,7 +253,7 @@ $.TileCache.prototype = {
                 if ( prevTime < worstTime ||
                     ( prevTime === worstTime && prevLevel > worstLevel ) ) {
                         if(worstTileIndex !== -1){
-                            console.log("Updated worst", worstTile, prevTile)
+                            console.log("Updated worst", worstTile, prevTile);
                         }
                     worstTile       = prevTile;
                     worstTileIndex  = i;
