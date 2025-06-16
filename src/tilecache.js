@@ -161,65 +161,6 @@ $.TileCache.prototype = {
         imageRecord.addTile(options.tile);
         options.tile.cacheImageRecord = imageRecord;
 
-        // let insertionIndex = this._tilesLoaded.length;
-
-        // // Note that just because we're unloading a tile doesn't necessarily mean
-        // // we're unloading its cache records. With repeated calls it should sort itself out, though.
-        // if ( this._cachesLoadedCount + this._zombiesLoadedCount > this._maxCacheItemCount ) {
-        //     //prefer zombie deletion, faster, better
-        //     if (this._zombiesLoadedCount > 0) {
-        //         for (let zombie in this._zombiesLoaded) {
-        //             this._zombiesLoaded[zombie].destroy();
-        //             delete this._zombiesLoaded[zombie];
-        //             this._zombiesLoadedCount--;
-        //             break;
-        //         }
-        //     } else {
-        //         let worstTile = null;
-        //         let prevTile, worstTime, worstLevel, prevTime, prevLevel;
-
-        //         for ( let i = this._tilesLoaded.length - 1; i >= 0; i-- ) {
-        //             prevTile = this._tilesLoaded[ i ];
-
-        //             if ( prevTile.level <= cutoff ||
-        //                 prevTile.beingDrawn ||
-        //                 prevTile.loading ||
-        //                 prevTile.processing ) {
-        //                 continue;
-        //             }
-        //             if ( !worstTile ) {
-        //                 worstTile       = prevTile;
-        //                 worstTileIndex  = i;
-        //                 continue;
-        //             }
-
-        //             prevTime    = prevTile.lastTouchTime;
-        //             worstTime   = worstTile.lastTouchTime;
-        //             prevLevel   = prevTile.level;
-        //             worstLevel  = worstTile.level;
-
-        //             if ( prevTime < worstTime ||
-        //                 ( prevTime === worstTime && prevLevel > worstLevel )) {
-        //                 worstTile       = prevTile;
-        //                 worstTileIndex  = i;
-        //             }
-        //         }
-
-        //         if ( worstTile && worstTileIndex >= 0 ) {
-        //             this._unloadTile(worstTile, true);
-        //             insertionIndex = worstTileIndex;
-        //         }
-        //     }
-
-        //     if (theTile.getCacheSize() === 0) {
-        //         this._tilesLoaded[ insertionIndex ] = theTile;
-        //     } else if (worstTileIndex >= 0) {
-        //         //tile is already recorded, do not add tile, but remove the tile at insertion index
-        //         this._tilesLoaded.splice(insertionIndex, 1);
-        //     }
-        // }
-
-
         // Note that just because we're unloading a tile doesn't necessarily mean
         // we're unloading an image. With repeated calls it should sort itself out, though.
         console.log("Cache size:", this._imagesLoadedCount, this._maxImageCacheCount);
