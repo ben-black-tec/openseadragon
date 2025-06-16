@@ -254,13 +254,13 @@ $.TileCache.prototype = {
 
         tile.unload();
         tile.cacheImageRecord = null;
+        console.log("context2D", tile.cacheImageRecord);
 
         var imageRecord = this._imagesLoaded[tile.cacheKey];
         if(!imageRecord){
             return;
         }
         imageRecord.removeTile(tile);
-        console.log("context2D", imageRecord);
         if (!imageRecord.getTileCount()) {
 
             imageRecord.destroy();
