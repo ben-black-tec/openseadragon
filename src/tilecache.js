@@ -163,7 +163,6 @@ $.TileCache.prototype = {
 
         // Note that just because we're unloading a tile doesn't necessarily mean
         // we're unloading an image. With repeated calls it should sort itself out, though.
-        console.log("Cache size:", this._imagesLoadedCount, this._maxImageCacheCount);
         const curTime = $.now();
         while ( this._imagesLoadedCount > this._maxImageCacheCount ) {
             var worstTile       = null;
@@ -252,7 +251,6 @@ $.TileCache.prototype = {
         // dont' call tile.getCanvasContext because it writes to a canvas even if we haven't before
         let context2D = tile.context2D;
 
-        console.log("context2D", tile);
         tile.unload();
         tile.cacheImageRecord = null;
 

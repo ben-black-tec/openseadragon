@@ -862,7 +862,6 @@ $.TileSource.prototype = {
      */
     destroyTileCache: function (cacheObject) {
         if(cacheObject._data.close){
-            console.log("Destroying data", cacheObject._data, cacheObject);
             cacheObject._data.close();
         }
         cacheObject._data = null;
