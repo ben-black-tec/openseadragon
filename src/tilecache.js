@@ -234,8 +234,10 @@ $.TileCache.prototype = {
                 prevTileRecord = this._tilesLoaded[ i ];
                 prevTile = prevTileRecord.tile;
 
-
-                if ( //prevTile.level <= cutoff ||
+                const LEVEL_CUTOFF = 5;
+                const TIME_MS_CUTOFF = 100;
+                if ( prevTile.level <= LEVEL_CUTOFF ||
+                    curTime - prevTile.lastTouchTime <= TIME_MS_CUTOFF ||
                     prevTile.beingDrawn ||
                     prevTile.loading ||
                     prevTile.processing ) {
