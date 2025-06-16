@@ -223,12 +223,12 @@ $.TileCache.prototype = {
         // Note that just because we're unloading a tile doesn't necessarily mean
         // we're unloading an image. With repeated calls it should sort itself out, though.
         console.log("Cache size:", this._imagesLoadedCount, this._maxImageCacheCount);
+        const curTime = $.now();
         while ( this._imagesLoadedCount > this._maxImageCacheCount ) {
             var worstTile       = null;
             var worstTileIndex  = -1;
             var worstTileRecord = null;
             var prevTile, worstTime, worstLevel, prevTime, prevLevel, prevTileRecord;
-            const curTime = $.now();
 
             for ( var i = this._tilesLoaded.length - 1; i >= 0; i-- ) {
                 prevTileRecord = this._tilesLoaded[ i ];
@@ -266,7 +266,7 @@ $.TileCache.prototype = {
                 this._unloadTile(worstTileRecord);
                 this._tilesLoaded.splice(worstTileIndex, 1);
                 // insertionIndex = worstTileIndex;
-                console.log(this._tilesLoaded, worstTileIndex, curTime - worstTile.lastTouchTime);
+                console.log(this._tilesLoaded, curTime, worstTileIndex, curTime - worstTile.lastTouchTime);
             }
             else{
                 break;
