@@ -236,7 +236,6 @@ $.TileCache.prototype = {
 
                 if ( //prevTile.level <= cutoff ||
                     prevTile.beingDrawn ||
-                    prevTile._needsDraw ||
                     prevTile.loading ||
                     prevTile.processing ) {
                     continue;
@@ -262,8 +261,8 @@ $.TileCache.prototype = {
 
             if ( worstTile && worstTileIndex >= 0 ) {
                 this._unloadTile(worstTileRecord);
-                // this._tilesLoaded.splice(worstTileIndex, 1);
-                insertionIndex = worstTileIndex;
+                this._tilesLoaded.splice(worstTileIndex, 1);
+                // insertionIndex = worstTileIndex;
             }
         }
 
