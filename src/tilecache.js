@@ -252,9 +252,9 @@ $.TileCache.prototype = {
         // dont' call tile.getCanvasContext because it writes to a canvas even if we haven't before
         let context2D = tile.context2D;
 
+        console.log("context2D", tile);
         tile.unload();
         tile.cacheImageRecord = null;
-        console.log("context2D", tile.cacheImageRecord);
 
         var imageRecord = this._imagesLoaded[tile.cacheKey];
         if(!imageRecord){
