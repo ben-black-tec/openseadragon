@@ -1914,6 +1914,7 @@ $.extend($.TiledImage.prototype, $.EventSource.prototype, /** @lends OpenSeadrag
 
             context2D = tileSource.getContext2D ?
                 tileSource.getContext2D(level, xMod, yMod) : undefined;
+            console.log(context2D);
 
             tile = new $.Tile(
                 level,
