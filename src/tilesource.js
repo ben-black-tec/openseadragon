@@ -861,6 +861,10 @@ $.TileSource.prototype = {
      * @param {object} cacheObject context cache object
      */
     destroyTileCache: function (cacheObject) {
+        if(cacheObject._data.close){
+            console.log("Destroying data", cacheObject._data, cacheObject);
+            cacheObject._data.close();
+        }
         cacheObject._data = null;
         cacheObject._renderedContext = null;
     },
