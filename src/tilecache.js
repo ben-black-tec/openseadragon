@@ -263,6 +263,7 @@ $.TileCache.prototype = {
                 this._unloadTile(worstTileRecord);
                 this._tilesLoaded.splice(worstTileIndex, 1);
                 // insertionIndex = worstTileIndex;
+                console.log(worstTileIndex);
             }
         }
 
