@@ -133,7 +133,7 @@ $.TileCache.prototype = {
         $.console.assert( options.tiledImage, "[TileCache.cacheTile] options.tiledImage is required" );
 
         // var cutoff = options.cutoff || 0;
-        var insertionIndex = this._tilesLoaded.length;
+        // var insertionIndex = this._tilesLoaded.length;
 
         var imageRecord = this._imagesLoaded[options.tile.cacheKey];
         if (!imageRecord) {
