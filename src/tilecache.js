@@ -235,7 +235,7 @@ $.TileCache.prototype = {
                 prevTile = prevTileRecord.tile;
 
                 const LEVEL_CUTOFF = 5;
-                const TIME_MS_CUTOFF = 100;
+                const TIME_MS_CUTOFF = 1000;
                 if ( prevTile.level <= LEVEL_CUTOFF ||
                     curTime - prevTile.lastTouchTime <= TIME_MS_CUTOFF ||
                     prevTile.beingDrawn ||
@@ -266,7 +266,7 @@ $.TileCache.prototype = {
                 this._unloadTile(worstTileRecord);
                 this._tilesLoaded.splice(worstTileIndex, 1);
                 // insertionIndex = worstTileIndex;
-                console.log(worstTileIndex, curTime - worstTile.lastTouchTime);
+                console.log(this._tilesLoaded, worstTileIndex, curTime - worstTile.lastTouchTime);
             }
             else{
                 break;
