@@ -1319,15 +1319,14 @@ $.extend($.TiledImage.prototype, $.EventSource.prototype, /** @lends OpenSeadrag
         var drawArea = this.getDrawArea();
         var currentTime = $.now();
 
-        for (var levelTiles of this.tilesMatrix) {
-            for (var xTiles of levelTiles) {
-                for (var yTile of xTiles) {
+        // reset each tile's beingDrawn flag
+        for (var levelTiles of Object.values(this.tilesMatrix)) {
+            for (var xTiles of Object.values(levelTiles)) {
+                for (var yTile of Object.values(xTiles)) {
                     yTile.beingDrawn = false;
                 }
             }
         }
-
-        // reset each tile's beingDrawn flag
         this._lastDrawn.forEach(tileinfo => {
             tileinfo.tile.beingDrawn = false;
         });
