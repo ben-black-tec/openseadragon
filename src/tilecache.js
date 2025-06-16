@@ -249,9 +249,8 @@ $.TileCache.prototype = {
         var tile = tileRecord.tile;
         var tiledImage = tileRecord.tiledImage;
 
-        // tile.getCanvasContext should always exist in normal usage (with $.Tile)
-        // but the tile cache test passes in a dummy object
-        let context2D = tile.getCanvasContext && tile.getCanvasContext();
+        // dont' call tile.getCanvasContext because it writes to a canvas even if we haven't before
+        let context2D = tile.context2D;
 
         tile.unload();
         tile.cacheImageRecord = null;
