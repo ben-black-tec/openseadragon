@@ -236,6 +236,7 @@ $.TileCache.prototype = {
 
                 if ( //prevTile.level <= cutoff ||
                     prevTile.beingDrawn ||
+                    prevTile._needsDraw ||
                     prevTile.loading ||
                     prevTile.processing ) {
                     continue;
