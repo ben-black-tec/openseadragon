@@ -227,13 +227,14 @@ $.TileCache.prototype = {
             var worstTileIndex  = -1;
             var worstTileRecord = null;
             var prevTile, worstTime, worstLevel, prevTime, prevLevel, prevTileRecord;
+            const curTime = $.now();
 
             for ( var i = this._tilesLoaded.length - 1; i >= 0; i-- ) {
                 prevTileRecord = this._tilesLoaded[ i ];
                 prevTile = prevTileRecord.tile;
 
 
-                if ( prevTile.level <= cutoff ||
+                if ( //prevTile.level <= cutoff ||
                     prevTile.beingDrawn ||
                     prevTile.loading ||
                     prevTile.processing ) {
@@ -252,9 +253,6 @@ $.TileCache.prototype = {
 
                 if ( prevTime < worstTime ||
                     ( prevTime === worstTime && prevLevel > worstLevel ) ) {
-                        if(worstTileIndex !== -1){
-                            console.log("Updated worst", worstTile, prevTile);
-                        }
                     worstTile       = prevTile;
                     worstTileIndex  = i;
                     worstTileRecord = prevTileRecord;
