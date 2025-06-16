@@ -223,7 +223,7 @@ $.TileCache.prototype = {
         // Note that just because we're unloading a tile doesn't necessarily mean
         // we're unloading an image. With repeated calls it should sort itself out, though.
         console.log("Cache size:", this._imagesLoadedCount, this._maxImageCacheCount);
-        if ( this._imagesLoadedCount > this._maxImageCacheCount ) {
+        while ( this._imagesLoadedCount > this._maxImageCacheCount ) {
             var worstTile       = null;
             var worstTileIndex  = -1;
             var worstTileRecord = null;
@@ -267,6 +267,9 @@ $.TileCache.prototype = {
                 this._tilesLoaded.splice(worstTileIndex, 1);
                 // insertionIndex = worstTileIndex;
                 console.log(worstTileIndex, curTime - worstTile.lastTouchTime);
+            }
+            else{
+                break;
             }
         }
 
