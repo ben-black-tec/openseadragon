@@ -260,7 +260,7 @@ $.TileCache.prototype = {
                 }
             }
 
-            if ( worstTile && worstTileIndex >= 0 ) {
+            if ( worstTile ) {
                 this._unloadTile(worstTileRecord);
                 this._tilesLoaded.splice(worstTileIndex, 1);
                 // insertionIndex = worstTileIndex;
@@ -268,10 +268,10 @@ $.TileCache.prototype = {
             }
         }
 
-        this._tilesLoaded[ insertionIndex ] = new TileRecord({
+        this._tilesLoaded.push(new TileRecord({
             tile: options.tile,
             tiledImage: options.tiledImage
-        });
+        }));
     },
 
     /**
