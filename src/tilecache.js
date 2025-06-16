@@ -132,7 +132,7 @@ $.TileCache.prototype = {
         $.console.assert( options.tile.cacheKey, "[TileCache.cacheTile] options.tile.cacheKey is required" );
         $.console.assert( options.tiledImage, "[TileCache.cacheTile] options.tiledImage is required" );
 
-        var cutoff = options.cutoff || 0;
+        // var cutoff = options.cutoff || 0;
         var insertionIndex = this._tilesLoaded.length;
 
         var imageRecord = this._imagesLoaded[options.tile.cacheKey];
@@ -227,7 +227,7 @@ $.TileCache.prototype = {
             var worstTileIndex  = -1;
             var worstTileRecord = null;
             var prevTile, worstTime, worstLevel, prevTime, prevLevel, prevTileRecord;
-            const curTime = $.now();
+            // const curTime = $.now();
 
             for ( var i = this._tilesLoaded.length - 1; i >= 0; i-- ) {
                 prevTileRecord = this._tilesLoaded[ i ];
