@@ -161,7 +161,7 @@ $.TileCache.prototype = {
         imageRecord.addTile(options.tile);
         options.tile.cacheImageRecord = imageRecord;
 
-        let insertionIndex = this._tilesLoaded.length;
+        // let insertionIndex = this._tilesLoaded.length;
 
         // // Note that just because we're unloading a tile doesn't necessarily mean
         // // we're unloading its cache records. With repeated calls it should sort itself out, though.
