@@ -260,7 +260,7 @@ $.TileCache.prototype = {
             return;
         }
         imageRecord.removeTile(tile);
-        console.log("context2D", context2D);
+        console.log("context2D", imageRecord);
         if (!imageRecord.getTileCount()) {
 
             imageRecord.destroy();
