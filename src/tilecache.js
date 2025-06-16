@@ -228,7 +228,7 @@ $.TileCache.prototype = {
             var worstTileIndex  = -1;
             var worstTileRecord = null;
             var prevTile, worstTime, worstLevel, prevTime, prevLevel, prevTileRecord;
-            // const curTime = $.now();
+            const curTime = $.now();
 
             for ( var i = this._tilesLoaded.length - 1; i >= 0; i-- ) {
                 prevTileRecord = this._tilesLoaded[ i ];
@@ -264,7 +264,7 @@ $.TileCache.prototype = {
                 this._unloadTile(worstTileRecord);
                 this._tilesLoaded.splice(worstTileIndex, 1);
                 // insertionIndex = worstTileIndex;
-                console.log(worstTileIndex, worstTile.lastTouchTime);
+                console.log(worstTileIndex, curTime - worstTile.lastTouchTime);
             }
         }
 
