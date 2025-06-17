@@ -113,6 +113,7 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
      * Draws the TiledImages
      */
     draw(tiledImages) {
+        console.log(tiledImages);
         var viewportSize = this._calculateCanvasSize();
         if (
             this.canvas.width !== viewportSize.x ||

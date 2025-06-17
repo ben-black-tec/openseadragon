@@ -1362,15 +1362,6 @@ $.extend($.TiledImage.prototype, $.EventSource.prototype, /** @lends OpenSeadrag
                 break;
             }
         }
-        // preload high zoom levels from lowest to highest
-        const IMMEDIATE_LOAD_LEVEL = 3;
-        for(var level = this.source.minLevel; level <= IMMEDIATE_LOAD_LEVEL; level++){
-            if (!levelList.includes(level)){
-                levelList.push(level);
-            }
-        }
-        console.log("levelsInterval", levelList);
-
         // Update any level that will be drawn.
         // We are iterating from highest resolution to lowest resolution
         // Once a level fully covers the viewport the loop is halted and
@@ -1379,10 +1370,6 @@ $.extend($.TiledImage.prototype, $.EventSource.prototype, /** @lends OpenSeadrag
         let skipHigherLevels = false;
         for (let i = 0; i < levelList.length; i++) {
             let level = levelList[i];
-
-            if (skipHigherLevels && level > IMMEDIATE_LOAD_LEVEL){
-                continue;
-            }
 
             var currentRenderPixelRatio = this.viewport.deltaPixelsFromPointsNoRotate(
                 this.source.getPixelRatio(level),
@@ -1413,16 +1400,18 @@ $.extend($.TiledImage.prototype, $.EventSource.prototype, /** @lends OpenSeadrag
                 false
             ).x * this._scaleSpring.current.value;
 
-            var optimalRatio = this.immediateRender && level > IMMEDIATE_LOAD_LEVEL ? 1 : targetZeroRatio;
+            var optimalRatio = this.immediateRender ? 1 : targetZeroRatio;
             var levelOpacity = Math.min(1, (currentRenderPixelRatio - 0.5) / 0.5);
             var levelVisibility = optimalRatio / Math.abs(
                 optimalRatio - targetRenderPixelRatio
             );
             let curDrawArea = drawArea;
-            if(level <= IMMEDIATE_LOAD_LEVEL){
-                curDrawArea = new $.Rect(0, 0, 3, 3);
+            if(currentRenderPixelRatio >= 8 * this.minPixelRatio){
+                curDrawArea = new $.Rect(curDrawArea.x - curDrawArea.width/2, curDrawArea.y - curDrawArea.height/2, curDrawArea.width*2, curDrawArea.height * 2)
             }
-
+            else if (skipHigherLevels){
+                continue;
+            }
             // Update the level and keep track of 'best' tiles to load
             var result = this._updateLevel(
                 level,
