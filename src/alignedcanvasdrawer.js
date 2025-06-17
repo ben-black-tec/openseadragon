@@ -656,11 +656,13 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
             (tile.position.x + 10) * $.pixelDensityRatio,
             (tile.position.y + 70) * $.pixelDensityRatio
         );
-        context.fillText(
-            "Opacity: " + tile.opacity.toString(),
-            (tile.position.x + 10) * $.pixelDensityRatio,
-            (tile.position.y + 80) * $.pixelDensityRatio
-        );
+        if(tile.opacity || tile.opacity === 0){
+            context.fillText(
+                "Opacity: " + tile.opacity.toString(),
+                (tile.position.x + 10) * $.pixelDensityRatio,
+                (tile.position.y + 80) * $.pixelDensityRatio
+            );
+        }
 
         if (this.viewport.getRotation(true) % 360 !== 0) {
             this._restoreRotationChanges();
