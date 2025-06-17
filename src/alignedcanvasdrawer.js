@@ -508,7 +508,7 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
                 );
             }
             this.scontext.save();
-            if (tile.opacity || tile.opacity === 0) {
+            if ((tile.opacity && tile.opacity !== 1) || tile.opacity === 0) {
                 this.scontext.globalAlpha = tile.opacity;
             }
             this.scontext.drawImage(
@@ -655,6 +655,11 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
             "Position: " + tile.position.toString(),
             (tile.position.x + 10) * $.pixelDensityRatio,
             (tile.position.y + 70) * $.pixelDensityRatio
+        );
+        context.fillText(
+            "Opacity: " + tile.opacity.toString(),
+            (tile.position.x + 10) * $.pixelDensityRatio,
+            (tile.position.y + 80) * $.pixelDensityRatio
         );
 
         if (this.viewport.getRotation(true) % 360 !== 0) {
