@@ -454,7 +454,7 @@ function loadPanels( strip, viewerSize, scroll ) {
                 animationTime:          0,
                 loadTilesWithAjax:      strip.viewer.loadTilesWithAjax,
                 ajaxHeaders:            strip.viewer.ajaxHeaders,
-                drawer:                 'canvas', //always use canvas for the reference strip
+                drawer:                 $.AlignedCanvasDrawer, //always use canvas for the reference strip
             } );
             // Allow pointer events to pass through miniViewer's canvas/container
             //   elements so implicit pointer capture works on touch devices
