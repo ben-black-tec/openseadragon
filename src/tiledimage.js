@@ -1381,7 +1381,6 @@ $.extend($.TiledImage.prototype, $.EventSource.prototype, /** @lends OpenSeadrag
             if (i === levelList.length - 1 || currentRenderPixelRatio >= this.minPixelRatio ) {
                 useLevel = true;
             } else if (!useLevel) {
-                console.log("Continue not level");
                 continue;
             }
 
