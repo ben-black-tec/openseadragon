@@ -164,7 +164,7 @@ $.TileCache.prototype = {
         // options.cutoff is the lowest layer
         // where the entire scene can be contained in a single tile
         // i.e. preview image/etc, so this doesn't add much cache load
-        const cutoff = options.cutoff || 0
+        const cutoff = options.cutoff || 0;
         const TIME_MS_CUTOFF = 1000;
         const curTime = $.now();
         while ( this._imagesLoadedCount > this._maxImageCacheCount ) {
