@@ -113,7 +113,6 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
      * Draws the TiledImages
      */
     draw(tiledImages) {
-        console.log(tiledImages);
         var viewportSize = this._calculateCanvasSize();
         if (
             this.canvas.width !== viewportSize.x ||
@@ -135,6 +134,7 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
         );
 
         const allTiles = imageTilesList.flat();
+        console.log(allTiles);
         if (allTiles.length) {
             const tiledImage = tiledImages[0];
             let levelSet = Array.from(
