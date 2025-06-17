@@ -90,7 +90,7 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
     }
 
     getType() {
-        return "canvas";
+        return "alignedcanvas";
     }
 
     getSupportedDataFormats() {
