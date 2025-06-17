@@ -1361,7 +1361,8 @@ $.extend($.TiledImage.prototype, $.EventSource.prototype, /** @lends OpenSeadrag
                 break;
             }
         }
-
+        const IMMEDIATE_LOAD_LEVEL = 3;
+        console.log("levelsInterval", levelsInterval);
 
         // Update any level that will be drawn.
         // We are iterating from highest resolution to lowest resolution
@@ -1399,8 +1400,6 @@ $.extend($.TiledImage.prototype, $.EventSource.prototype, /** @lends OpenSeadrag
                 false
             ).x * this._scaleSpring.current.value;
 
-            const IMMEDIATE_LOAD_LEVEL = 3;
-
             var optimalRatio = this.immediateRender && level > IMMEDIATE_LOAD_LEVEL ? 1 : targetZeroRatio;
             var levelOpacity = Math.min(1, (currentRenderPixelRatio - 0.5) / 0.5);
             var levelVisibility = optimalRatio / Math.abs(
@@ -1410,7 +1409,6 @@ $.extend($.TiledImage.prototype, $.EventSource.prototype, /** @lends OpenSeadrag
             if(level <= IMMEDIATE_LOAD_LEVEL){
                 curDrawArea = new $.Rect(0, 0, 3, 3);
             }
-            console.log("level", level);
 
             // Update the level and keep track of 'best' tiles to load
             var result = this._updateLevel(
