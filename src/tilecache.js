@@ -177,6 +177,9 @@ $.TileCache.prototype = {
                 prevTileRecord = this._tilesLoaded[ i ];
                 prevTile = prevTileRecord.tile;
 
+                // for some reason beingDrawn, loading, processing checks not
+                // good enough, also need to check time just to be absolutely sure
+                // the tile isn't being drawn right now
                 if ( prevTile.level <= LEVEL_CUTOFF ||
                     curTime - prevTile.lastTouchTime <= TIME_MS_CUTOFF ||
                     prevTile.beingDrawn ||
