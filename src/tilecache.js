@@ -161,10 +161,10 @@ $.TileCache.prototype = {
         imageRecord.addTile(options.tile);
         options.tile.cacheImageRecord = imageRecord;
 
-        // Note that just because we're unloading a tile doesn't necessarily mean
-        // we're unloading an image. With repeated calls it should sort itself out, though.
-        const MAX_LEVEL_FACTOR = 5;
-        const LEVEL_CUTOFF = options.tiledImage.source.maxLevel ? options.tiledImage.source.maxLevel - MAX_LEVEL_FACTOR : -1e10;
+        // options.cutoff is the lowest layer
+        // where the entire scene can be contained in a single tile
+        // i.e. preview image/etc, so this doesn't add much cache load
+        const cutoff = options.cutoff || 0
         const TIME_MS_CUTOFF = 1000;
         const curTime = $.now();
         while ( this._imagesLoadedCount > this._maxImageCacheCount ) {
@@ -180,7 +180,7 @@ $.TileCache.prototype = {
                 // for some reason beingDrawn, loading, processing checks not
                 // good enough, also need to check time just to be absolutely sure
                 // the tile isn't being drawn right now
-                if ( prevTile.level <= LEVEL_CUTOFF ||
+                if ( prevTile.level <= cutoff ||
                     curTime - prevTile.lastTouchTime <= TIME_MS_CUTOFF ||
                     prevTile.beingDrawn ||
                     prevTile.loading ||
@@ -208,6 +208,8 @@ $.TileCache.prototype = {
 
             if ( worstTile ) {
                 this._unloadTile(worstTileRecord);
+                // since the cache is finite sized, this
+                // n^2 splicing operation shouldn't be too bad
                 this._tilesLoaded.splice(worstTileIndex, 1);
             }
             else{
