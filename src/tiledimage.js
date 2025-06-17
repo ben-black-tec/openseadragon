@@ -1369,15 +1369,20 @@ $.extend($.TiledImage.prototype, $.EventSource.prototype, /** @lends OpenSeadrag
                 levelList.push(level);
             }
         }
-        // console.log("levelsInterval", levelsInterval);
+        console.log("levelsInterval", levelList);
 
         // Update any level that will be drawn.
         // We are iterating from highest resolution to lowest resolution
         // Once a level fully covers the viewport the loop is halted and
         // lower-resolution levels are skipped
         let useLevel = false;
+        let skipHigherLevels = false;
         for (let i = 0; i < levelList.length; i++) {
             let level = levelList[i];
+
+            if (skipHigherLevels && level > IMMEDIATE_LOAD_LEVEL){
+                continue;
+            }
 
             var currentRenderPixelRatio = this.viewport.deltaPixelsFromPointsNoRotate(
                 this.source.getPixelRatio(level),
@@ -1389,6 +1394,7 @@ $.extend($.TiledImage.prototype, $.EventSource.prototype, /** @lends OpenSeadrag
             if (i === levelList.length - 1 || currentRenderPixelRatio >= this.minPixelRatio ) {
                 useLevel = true;
             } else if (!useLevel) {
+                console.log("Continue not level");
                 continue;
             }
 
@@ -1445,7 +1451,7 @@ $.extend($.TiledImage.prototype, $.EventSource.prototype, /** @lends OpenSeadrag
             // Stop the loop if lower-res tiles would all be covered by
             // already drawn tiles
             if (this._providesCoverage(this.coverage, level)) {
-                break;
+                skipHigherLevels = true;
             }
         }
 
