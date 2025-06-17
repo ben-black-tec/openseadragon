@@ -163,6 +163,9 @@ $.TileCache.prototype = {
 
         // Note that just because we're unloading a tile doesn't necessarily mean
         // we're unloading an image. With repeated calls it should sort itself out, though.
+        const MAX_LEVEL_FACTOR = 5;
+        const LEVEL_CUTOFF = options.tiledImage.source.maxLevel ? options.tiledImage.source.maxLevel - MAX_LEVEL_FACTOR : -1e10;
+        const TIME_MS_CUTOFF = 1000;
         const curTime = $.now();
         while ( this._imagesLoadedCount > this._maxImageCacheCount ) {
             var worstTile       = null;
@@ -174,8 +177,6 @@ $.TileCache.prototype = {
                 prevTileRecord = this._tilesLoaded[ i ];
                 prevTile = prevTileRecord.tile;
 
-                const LEVEL_CUTOFF = 5;
-                const TIME_MS_CUTOFF = 1000;
                 if ( prevTile.level <= LEVEL_CUTOFF ||
                     curTime - prevTile.lastTouchTime <= TIME_MS_CUTOFF ||
                     prevTile.beingDrawn ||
