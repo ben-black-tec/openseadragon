@@ -1408,7 +1408,7 @@ $.extend($.TiledImage.prototype, $.EventSource.prototype, /** @lends OpenSeadrag
             );
             let curDrawArea = drawArea;
             if(level <= IMMEDIATE_LOAD_LEVEL){
-                curDrawArea = new $.Rect(0,0,3,3);
+                curDrawArea = new $.Rect(0, 0, 3, 3);
             }
 
             // Update the level and keep track of 'best' tiles to load
