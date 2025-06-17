@@ -1406,8 +1406,10 @@ $.extend($.TiledImage.prototype, $.EventSource.prototype, /** @lends OpenSeadrag
                 optimalRatio - targetRenderPixelRatio
             );
             let curDrawArea = drawArea;
-            if(this.immediateRender && currentRenderPixelRatio >= 8 * this.minPixelRatio){
-                curDrawArea = new $.Rect(curDrawArea.x - curDrawArea.width / 2, curDrawArea.y - curDrawArea.height / 2, curDrawArea.width * 2, curDrawArea.height * 2);
+            const DIV_RATIO = 8;
+            if(this.immediateRender && currentRenderPixelRatio >= DIV_RATIO * this.minPixelRatio){
+                const AREA_RATIO = Math.sqrt(currentRenderPixelRatio / (DIV_RATIO * this.minPixelRatio));
+                curDrawArea = new $.Rect(curDrawArea.x - curDrawArea.width * AREA_RATIO, curDrawArea.y - curDrawArea.height * AREA_RATIO, curDrawArea.width * (1 + AREA_RATIO * 2), curDrawArea.height * (1 + AREA_RATIO * 2));
             }
             else if (skipHigherLevels){
                 continue;
