@@ -1409,7 +1409,9 @@ $.extend($.TiledImage.prototype, $.EventSource.prototype, /** @lends OpenSeadrag
             if(this.immediateRender && currentRenderPixelRatio >= DIV_RATIO * this.minPixelRatio){
                 const AREA_RATIO = Math.sqrt(currentRenderPixelRatio / (DIV_RATIO * this.minPixelRatio));
                 curDrawArea = new $.Rect(curDrawArea.x - curDrawArea.width * AREA_RATIO, curDrawArea.y - curDrawArea.height * AREA_RATIO, curDrawArea.width * (1 + AREA_RATIO * 2), curDrawArea.height * (1 + AREA_RATIO * 2));
-                levelVisibility = AREA_RATIO;
+                // prioritize loading higer resolution levels over lower ones,
+                // backwards from normal way of doing things
+                levelVisibility = level;
             }
             else if (skipHigherLevels){
                 continue;
@@ -1486,7 +1488,7 @@ $.extend($.TiledImage.prototype, $.EventSource.prototype, /** @lends OpenSeadrag
 
         function updateTile(info){
             let tile = info.tile;
-            if(tile && tile.loaded){
+            if(tile && tile.loaded && _this.blendTime > 0){
                 let tileIsBlending = _this._blendTile(
                     tile,
                     tile.x,
