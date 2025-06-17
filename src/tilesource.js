@@ -861,7 +861,8 @@ $.TileSource.prototype = {
      * @param {object} cacheObject context cache object
      */
     destroyTileCache: function (cacheObject) {
-        if(cacheObject._data.close){
+        // closes cacheObject._data if it is an ImageBitmap
+        if(cacheObject._data && cacheObject._data.close){
             cacheObject._data.close();
         }
         cacheObject._data = null;
