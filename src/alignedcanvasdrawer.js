@@ -134,6 +134,7 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
         );
 
         const allTiles = imageTilesList.flat();
+        console.log(allTiles);
         if (allTiles.length) {
             const tiledImage = tiledImages[0];
             let levelSet = Array.from(

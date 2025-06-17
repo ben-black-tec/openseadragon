@@ -1441,9 +1441,9 @@ $.extend($.TiledImage.prototype, $.EventSource.prototype, /** @lends OpenSeadrag
 
             // Stop the loop if lower-res tiles would all be covered by
             // already drawn tiles
-            if (this._providesCoverage(this.coverage, level)) {
-                skipHigherLevels = true;
-            }
+            // if (this._providesCoverage(this.coverage, level)) {
+            //     skipHigherLevels = true;
+            // }
         }
 
 
@@ -1486,7 +1486,7 @@ $.extend($.TiledImage.prototype, $.EventSource.prototype, /** @lends OpenSeadrag
 
         function updateTile(info){
             let tile = info.tile;
-            if(tile && tile.loaded){
+            if(tile && tile.loaded && _this.blendTime){
                 let tileIsBlending = _this._blendTile(
                     tile,
                     tile.x,
@@ -1504,21 +1504,21 @@ $.extend($.TiledImage.prototype, $.EventSource.prototype, /** @lends OpenSeadrag
         // Update each tile in the list of tiles. As the tiles are updated,
         // the coverage provided is also updated. If a level provides coverage
         // as part of this process, discard tiles from lower levels
-        let level = 0;
+        // let level = 0;
         for(let i = 0; i < tiles.length; i++){
             let tile = tiles[i];
             updateTile(tile);
-            if(this._providesCoverage(this.coverage, tile.level)){
-                level = Math.max(level, tile.level);
-            }
+            // if(this._providesCoverage(this.coverage, tile.level)){
+            //     level = Math.max(level, tile.level);
+            // }
         }
-        if(level > 0){
-            for( let levelKey in this._tilesToDraw ){
-                if( levelKey < level ){
-                    delete this._tilesToDraw[levelKey];
-                }
-            }
-        }
+        // if(level > 0){
+        //     for( let levelKey in this._tilesToDraw ){
+        //         if( levelKey < level ){
+        //             delete this._tilesToDraw[levelKey];
+        //         }
+        //     }
+        // }
 
     },
 
