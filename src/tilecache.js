@@ -206,8 +206,6 @@ $.TileCache.prototype = {
             if ( worstTile ) {
                 this._unloadTile(worstTileRecord);
                 this._tilesLoaded.splice(worstTileIndex, 1);
-                // insertionIndex = worstTileIndex;
-                // console.log(this._tilesLoaded, curTime, worstTileIndex, curTime - worstTile.lastTouchTime);
             }
             else{
                 break;
