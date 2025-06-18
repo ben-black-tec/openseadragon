@@ -1024,9 +1024,20 @@
                 if(!rendered){
                     throw('Tile context does not have a rendered', rendered);
                 }
+                const newCanv1 = document.createElement("canvas");
+                newCanv1.width = 100;
+                newCanv1.height = 100;
+                const newContext1 = newCanv1.getContext("2d");
+                newContext1.drawImage(rendered, 0, 0);
                 // This depends on gl.TEXTURE_2D being bound to the texture
                 // associated with this canvas before calling this function
                 gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, rendered);
+                console.log(rendered);
+                const newCanv = document.createElement("canvas");
+                newCanv.width = 100;
+                newCanv.height = 100;
+                const newContext = newCanv.getContext("2d");
+                newContext.drawImage(rendered, 0, 0);
             } catch (e){
                 $.console.error('Error uploading image data to WebGL', e);
             }
