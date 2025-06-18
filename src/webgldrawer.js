@@ -379,16 +379,22 @@
                         let tile = tilesToDraw[tileIndex].tile;
                         let indexInDrawArray = tileIndex % maxTextures;
                         let numTilesToDraw =  indexInDrawArray + 1;
-                        let tileContext = tile.getCanvasContext();
+                        let rendered = tile.cacheImageRecord._data;
+                        if (!rendered) {
+                            $.console.warn(
+                                '[Drawer._drawTileToCanvas] attempting to draw tile %s when it\'s not cached',
+                                tile.toString());
+                            continue;
+                        }
 
-                        let textureInfo = tileContext ? this._TextureMap.get(tileContext.canvas) : null;
+                        let textureInfo = rendered ? this._TextureMap.get(tile.cacheKey) : null;
                         if(!textureInfo){
                             // tile was not processed in the tile-ready event (this can happen
                             // if this drawer was created after the tile was downloaded)
                             this._tileReadyHandler({tile: tile, tiledImage: tiledImage});
 
                             // retry getting textureInfo
-                            textureInfo = tileContext ? this._TextureMap.get(tileContext.canvas) : null;
+                            textureInfo = rendered ? this._TextureMap.get(tile.cacheKey) : null;
                         }
 
                         if(textureInfo){
@@ -518,9 +524,9 @@
         }
 
         // private
-        _getTextureDataFromTile(tile){
-            return tile.getCanvasContext().canvas;
-        }
+        // _getTextureDataFromTile(tile){
+        //     return tile.getCanvasContext().canvas;
+        // }
 
         /**
         * Draw data from the rendering canvas onto the output canvas, with clipping,
@@ -898,22 +904,22 @@
                 return;
             }
 
-            let tileContext = tile.getCanvasContext();
-            let canvas = tileContext && tileContext.canvas;
+            let rendered = tile.cacheImageRecord._data;
+            // let canvas = tileContext && tileContext.canvas;
             // if the tile doesn't provide a canvas, or is tainted by cross-origin
             // data, marked the TiledImage as tainted so the canvas drawer can be
             // used instead, and return immediately - tainted data cannot be uploaded to webgl
-            if(!canvas || $.isCanvasTainted(canvas)){
-                const wasTainted = tiledImage.isTainted();
-                if(!wasTainted){
-                    tiledImage.setTainted(true);
-                    $.console.warn('WebGL cannot be used to draw this TiledImage because it has tainted data. Does crossOriginPolicy need to be set?');
-                    this._raiseDrawerErrorEvent(tiledImage, 'Tainted data cannot be used by the WebGLDrawer. Falling back to CanvasDrawer for this TiledImage.');
-                }
-                return;
-            }
+            // if(!canvas || $.isCanvasTainted(canvas)){
+            //     const wasTainted = tiledImage.isTainted();
+            //     if(!wasTainted){
+            //         tiledImage.setTainted(true);
+            //         $.console.warn('WebGL cannot be used to draw this TiledImage because it has tainted data. Does crossOriginPolicy need to be set?');
+            //         this._raiseDrawerErrorEvent(tiledImage, 'Tainted data cannot be used by the WebGLDrawer. Falling back to CanvasDrawer for this TiledImage.');
+            //     }
+            //     return;
+            // }
 
-            let textureInfo = this._TextureMap.get(canvas);
+            let textureInfo = this._TextureMap.get(tile.cacheKey);
 
             // if this is a new image for us, create a texture
             if(!textureInfo){
@@ -927,8 +933,8 @@
                 // deal with tiles where there is padding, i.e. the pixel data doesn't take up the entire provided canvas
                 let sourceWidthFraction, sourceHeightFraction;
                 if (tile.sourceBounds) {
-                    sourceWidthFraction = Math.min(tile.sourceBounds.width, canvas.width) / canvas.width;
-                    sourceHeightFraction = Math.min(tile.sourceBounds.height, canvas.height) / canvas.height;
+                    sourceWidthFraction = Math.min(tile.sourceBounds.width, rendered.width) / rendered.width;
+                    sourceHeightFraction = Math.min(tile.sourceBounds.height, rendered.height) / rendered.height;
                 } else {
                     sourceWidthFraction = 1;
                     sourceHeightFraction = 1;
@@ -956,8 +962,6 @@
                     position: position,
                 };
 
-                // add it to our _TextureMap
-                this._TextureMap.set(canvas, textureInfo);
                 gl.activeTexture(gl.TEXTURE0);
                 gl.bindTexture(gl.TEXTURE_2D, texture);
                 // Set the parameters so we can render any size image.
@@ -967,8 +971,10 @@
                 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, this._textureFilter());
 
                 // Upload the image into the texture.
-                this._uploadImageData(tileContext);
+                this._uploadImageData(rendered);
 
+                // add it to our _TextureMap
+                this._TextureMap.set(tile.cacheKey, textureInfo);
             }
 
         }
@@ -990,25 +996,24 @@
 
         // private
         _unloadTextures(){
-            let canvases = Array.from(this._TextureMap.keys());
-            canvases.forEach(canvas => {
-                this._cleanupImageData(canvas); // deletes texture, removes from _TextureMap
+            let cacheKeys = Array.from(this._TextureMap.keys());
+            cacheKeys.forEach((cacheKey) => {
+                this._cleanupImageData(cacheKey); // deletes texture, removes from _TextureMap
             });
         }
 
         // private
-        _uploadImageData(tileContext){
+        _uploadImageData(rendered){
 
             let gl = this._gl;
-            let canvas = tileContext.canvas;
 
             try{
-                if(!canvas){
-                    throw('Tile context does not have a canvas', tileContext);
+                if(!rendered){
+                    throw('Tile context does not have a rendered', rendered);
                 }
                 // This depends on gl.TEXTURE_2D being bound to the texture
                 // associated with this canvas before calling this function
-                gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, canvas);
+                gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, rendered);
             } catch (e){
                 $.console.error('Error uploading image data to WebGL', e);
             }
@@ -1016,15 +1021,15 @@
 
         // private
         _imageUnloadedHandler(event){
-            let canvas = event.context2D.canvas;
-            this._cleanupImageData(canvas);
+            console.log("_imageUnloadedHandler", event);
+            this._cleanupImageData(event.cacheKey);
         }
 
         // private
-        _cleanupImageData(tileCanvas){
-            let textureInfo = this._TextureMap.get(tileCanvas);
+        _cleanupImageData(cacheKey){
+            let textureInfo = this._TextureMap.get(cacheKey);
             //remove from the map
-            this._TextureMap.delete(tileCanvas);
+            this._TextureMap.delete(cacheKey);
 
             //release the texture from the GPU
             if(textureInfo){
@@ -1342,7 +1347,5 @@
         }
 
     };
-
-
 
 }( OpenSeadragon ));
