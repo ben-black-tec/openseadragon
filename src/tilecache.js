@@ -132,9 +132,6 @@ $.TileCache.prototype = {
         $.console.assert( options.tile.cacheKey, "[TileCache.cacheTile] options.tile.cacheKey is required" );
         $.console.assert( options.tiledImage, "[TileCache.cacheTile] options.tiledImage is required" );
 
-        // var cutoff = options.cutoff || 0;
-        // var insertionIndex = this._tilesLoaded.length;
-
         var imageRecord = this._imagesLoaded[options.tile.cacheKey];
         if (!imageRecord) {
 
@@ -165,7 +162,7 @@ $.TileCache.prototype = {
         // where the entire scene can be contained in a single tile
         // i.e. preview image/etc, so this doesn't add much cache load
         const cutoff = options.cutoff || 0;
-        const TIME_MS_CUTOFF = 1000;
+        const TIME_MS_CUTOFF = 2000;
         const curTime = $.now();
         while ( this._imagesLoadedCount > this._maxImageCacheCount ) {
             var worstTile       = null;

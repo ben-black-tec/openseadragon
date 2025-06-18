@@ -166,21 +166,20 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
             // it fails under some very specific circumstances which are difficult
             // to reproduce, not getting a big enough scanvas
 
-            // if (this.viewport.getRotation(true) % 360 !== 0) {
-                // can get much more accurate sizes with trigonometry
-                // but we really aren't using the empty space on the canvas
-                // so it shouldn't be too costly to upper bound
-                const sizeCeil = Math.ceil(
-                    Math.sqrt(
-                        adjViewPortWidth * adjViewPortWidth +
-                            adjViewPortHeight * adjViewPortHeight
-                    )
-                );
-                roundingSpace += Math.max(
-                    sizeCeil - adjViewPortWidth,
-                    sizeCeil - adjViewPortHeight
-                );
-            // }
+            // make the scanvas big enough to handle all possible rotations
+            // also necessary to fix weird artifacts caused by scanvas not
+            // being big enough
+            const sizeCeil = Math.ceil(
+                Math.sqrt(
+                    adjViewPortWidth * adjViewPortWidth +
+                        adjViewPortHeight * adjViewPortHeight
+                )
+            );
+            roundingSpace += Math.max(
+                sizeCeil - adjViewPortWidth,
+                sizeCeil - adjViewPortHeight
+            );
+
             let viewportSizeX =
                 Math.ceil(adjViewPortWidth + roundingSpace);
             let viewportSizeY =
