@@ -133,6 +133,7 @@ $.Navigator = function( options ){
         opacity:                options.opacity,
         borderColor:            options.borderColor,
         displayRegionColor:     options.displayRegionColor,
+        drawer:                 $.AlignedCanvasDrawer,
     });
 
     options.minPixelRatio = this.minPixelRatio = viewer.minPixelRatio;
