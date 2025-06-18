@@ -985,13 +985,6 @@
 
                 // Upload the image into the texture.
                 this._uploadImageData(rendered);
-                console.log(rendered);
-                this._gl.deleteTexture(textureInfo.texture);
-                const newCanv = document.createElement("canvas");
-                newCanv.width = 100;
-                newCanv.height = 100;
-                const newContext = newCanv.getContext("2d");
-                newContext.drawImage(rendered, 0, 0);
 
                 // add it to our _TextureMap
                 this._TextureMap.set(tile.cacheKey, textureInfo);
@@ -1052,7 +1045,6 @@
 
             //release the texture from the GPU
             if(textureInfo){
-                console.log("Deleting texture", textureInfo.texture);
                 this._gl.deleteTexture(textureInfo.texture);
             }
 
