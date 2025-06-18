@@ -1087,7 +1087,8 @@ $.extend($.TiledImage.prototype, $.EventSource.prototype, /** @lends OpenSeadrag
         tileArray.forEach(tileInfo => {
             tileInfo.tile.beingDrawn = true;
         });
-        this._lastDrawn = tileArray;
+        // copy array so that modifications to this._tilesToDraw don't impact it
+        this._lastDrawn = tileArray.slice();
         return tileArray;
     },
 
@@ -1488,7 +1489,7 @@ $.extend($.TiledImage.prototype, $.EventSource.prototype, /** @lends OpenSeadrag
 
         function updateTile(info){
             let tile = info.tile;
-            if(tile && tile.loaded && _this.blendTime > 0){
+            if(tile && tile.loaded){
                 let tileIsBlending = _this._blendTile(
                     tile,
                     tile.x,

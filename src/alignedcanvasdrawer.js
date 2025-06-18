@@ -93,10 +93,6 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
         return "alignedcanvas";
     }
 
-    getSupportedDataFormats() {
-        return ["image"];
-    }
-
     /**
      * create the HTML element (e.g. canvas, div) that the image will be drawn into
      * @returns {Element} the canvas to draw into
@@ -233,6 +229,8 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
                 const swidth = viewPortRect2.width * highTileRatio;
                 const sheight = viewPortRect2.height * highTileRatio;
 
+                // filling scontext is necessary to render accurate pixels,
+                // otherwise one-frame render delays of alphas destroys accuracy
                 this.scontext.fillStyle = tiledImage.placeholderFillStyle || $.DEFAULT_SETTINGS.placeholderFillStyle;
                 // fill in background on integer boundary within float boundary
                 // to avoid flickering lines and other aliasing artifacts.
@@ -275,7 +273,7 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
                 this.context.translate(-flipPoint.x, 0);
             }
 
-            if (tiledImage.opacity && tiledImage.opacity < 1) {
+            if ((tiledImage.opacity || tiledImage.opacity === 0) && tiledImage.opacity < 1) {
                 this.context.globalAlpha = tiledImage.opacity;
             }
 

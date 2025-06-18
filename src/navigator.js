@@ -132,7 +132,7 @@ $.Navigator = function( options ){
         background:             options.background,
         opacity:                options.opacity,
         borderColor:            options.borderColor,
-        displayRegionColor:     options.displayRegionColor
+        displayRegionColor:     options.displayRegionColor,
     });
 
     options.minPixelRatio = this.minPixelRatio = viewer.minPixelRatio;
