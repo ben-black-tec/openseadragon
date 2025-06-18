@@ -208,6 +208,7 @@ $.TileCache.prototype = {
                 // since the cache is finite sized, this
                 // n^2 splicing operation shouldn't be too bad
                 this._tilesLoaded.splice(worstTileIndex, 1);
+                console.log(worstTileIndex, this._tilesLoaded.length);
             }
             else{
                 break;
