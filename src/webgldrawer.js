@@ -1034,8 +1034,7 @@
 
         // private
         _imageUnloadedHandler(event){
-            console.log("_imageUnloadedHandler", event);
-            this._cleanupImageData(event.cacheKey);
+            this._cleanupImageData(event.tile.cacheKey);
         }
 
         // private
@@ -1046,6 +1045,7 @@
 
             //release the texture from the GPU
             if(textureInfo){
+                console.log("Deleting texture");
                 this._gl.deleteTexture(textureInfo.texture);
             }
 
