@@ -918,19 +918,6 @@
                     tile.toString());
                 return;
             }
-            // let canvas = tileContext && tileContext.canvas;
-            // if the tile doesn't provide a canvas, or is tainted by cross-origin
-            // data, marked the TiledImage as tainted so the canvas drawer can be
-            // used instead, and return immediately - tainted data cannot be uploaded to webgl
-            // if(!canvas || $.isCanvasTainted(canvas)){
-            //     const wasTainted = tiledImage.isTainted();
-            //     if(!wasTainted){
-            //         tiledImage.setTainted(true);
-            //         $.console.warn('WebGL cannot be used to draw this TiledImage because it has tainted data. Does crossOriginPolicy need to be set?');
-            //         this._raiseDrawerErrorEvent(tiledImage, 'Tainted data cannot be used by the WebGLDrawer. Falling back to CanvasDrawer for this TiledImage.');
-            //     }
-            //     return;
-            // }
 
             let textureInfo = this._TextureMap.get(tile.cacheKey);
 
