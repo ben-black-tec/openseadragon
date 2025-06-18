@@ -863,8 +863,8 @@ $.TileSource.prototype = {
     destroyTileCache: function (cacheObject) {
         // closes cacheObject._data if it is an ImageBitmap
         if(cacheObject._data && cacheObject._data.close){
-            console.log(cacheObject);
-            cacheObject._data.close();
+            // console.log(cacheObject);
+            // cacheObject._data.close();
         }
         cacheObject._data = null;
         cacheObject._renderedContext = null;
