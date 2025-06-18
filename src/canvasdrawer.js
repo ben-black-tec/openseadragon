@@ -557,7 +557,13 @@ class CanvasDrawer extends OpenSeadragon.DrawerBase{
             return;
         }
 
-        rendered = tile.getCanvasContext();
+        let rendered = tile.cacheImageRecord.getData();
+        if (!rendered) {
+            const imgRecord = tiledImage._tileCache.getImageRecord(tile.cacheKey);
+            if (imgRecord) {
+                rendered = imgRecord.getData();
+            }
+        }
 
         if ( !tile.loaded || !rendered ){
             $.console.warn(

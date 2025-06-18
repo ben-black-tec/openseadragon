@@ -379,7 +379,13 @@
                         let tile = tilesToDraw[tileIndex].tile;
                         let indexInDrawArray = tileIndex % maxTextures;
                         let numTilesToDraw =  indexInDrawArray + 1;
-                        let rendered = tile.cacheImageRecord._data;
+                        let rendered = tile.cacheImageRecord.getData();
+                        if (!rendered) {
+                            const imgRecord = tiledImage._tileCache.getImageRecord(tile.cacheKey);
+                            if (imgRecord) {
+                                rendered = imgRecord.getData();
+                            }
+                        }
                         if (!rendered) {
                             $.console.warn(
                                 '[Drawer._drawTileToCanvas] attempting to draw tile %s when it\'s not cached',
@@ -522,11 +528,6 @@
 
             context.restore();
         }
-
-        // private
-        // _getTextureDataFromTile(tile){
-        //     return tile.getCanvasContext().canvas;
-        // }
 
         /**
         * Draw data from the rendering canvas onto the output canvas, with clipping,
@@ -904,7 +905,19 @@
                 return;
             }
 
-            let rendered = tile.cacheImageRecord._data;
+            let rendered = tile.cacheImageRecord.getData();
+            if (!rendered) {
+                const imgRecord = tiledImage._tileCache.getImageRecord(tile.cacheKey);
+                if (imgRecord) {
+                    rendered = imgRecord.getData();
+                }
+            }
+            if (!rendered) {
+                $.console.warn(
+                    '[Drawer._drawTileToCanvas] attempting to draw tile %s when it\'s not cached',
+                    tile.toString());
+                return;
+            }
             // let canvas = tileContext && tileContext.canvas;
             // if the tile doesn't provide a canvas, or is tainted by cross-origin
             // data, marked the TiledImage as tainted so the canvas drawer can be

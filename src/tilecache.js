@@ -249,9 +249,6 @@ $.TileCache.prototype = {
         var tile = tileRecord.tile;
         var tiledImage = tileRecord.tiledImage;
 
-        // dont' call tile.getCanvasContext because it writes to a canvas even if we haven't before
-        let context2D = tile.context2D;
-
         tile.unload();
         tile.cacheImageRecord = null;
 
@@ -266,29 +263,19 @@ $.TileCache.prototype = {
             delete this._imagesLoaded[tile.cacheKey];
             this._imagesLoadedCount--;
 
-            if(context2D){
-                /**
-                 * Free up canvas memory
-                 * (iOS 12 or higher on 2GB RAM device has only 224MB canvas memory,
-                 * and Safari keeps canvas until its height and width will be set to 0).
-                 */
-                context2D.canvas.width = 0;
-                context2D.canvas.height = 0;
-
-                /**
-                 * Triggered when an image has just been unloaded
-                 *
-                 * @event image-unloaded
-                 * @memberof OpenSeadragon.Viewer
-                 * @type {object}
-                 * @property {CanvasRenderingContext2D} context2D - The context that is being unloaded
-                 * @private
-                 */
-                tiledImage.viewer.raiseEvent("image-unloaded", {
-                    context2D: context2D,
-                    tile: tile
-                });
-            }
+            /**
+             * Triggered when an image has just been unloaded
+             *
+             * @event image-unloaded
+             * @memberof OpenSeadragon.Viewer
+             * @type {object}
+             * @property {CanvasRenderingContext2D} context2D - The context that is being unloaded
+             * @private
+             */
+            tiledImage.viewer.raiseEvent("image-unloaded", {
+                context2D: null,
+                tile: tile
+            });
 
         }
 

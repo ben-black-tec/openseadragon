@@ -330,6 +330,7 @@ $.Tile.prototype = {
      * @returns {CanvasRenderingContext2D}
      */
     getCanvasContext: function() {
+        console.log("getCanvasContext called, not good");
         return this.context2D || (this.cacheImageRecord && this.cacheImageRecord.getRenderedContext());
     },
 
