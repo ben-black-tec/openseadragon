@@ -122,7 +122,7 @@ $.Navigator = function( options ){
         mouseNavEnabled:        false,
         showNavigationControl:  false,
         showSequenceControl:    false,
-        immediateRender:        true,
+        immediateRender:        false,
         blendTime:              0,
         animationTime:          options.animationTime,
         // disable autoResize since resize behavior is implemented differently by the navigator
