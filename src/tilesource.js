@@ -352,7 +352,7 @@ $.TileSource.prototype = {
 
         for (i = this.minLevel + 1; i <= this.maxLevel; i++){
             tiles = this.getNumTiles(i);
-            if (tiles.x > 6 || tiles.y > 6) {
+            if (tiles.x >= 6 || tiles.y >= 6) {
                 break;
             }
         }
