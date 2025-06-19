@@ -164,6 +164,7 @@ $.TileCache.prototype = {
         const cutoff = options.cutoff || 0;
         const TIME_MS_CUTOFF = 2000;
         const curTime = $.now();
+        console.log(this._imagesLoadedCount.length, this._maxImageCacheCount.length);
         while ( this._imagesLoadedCount > this._maxImageCacheCount ) {
             var worstTile       = null;
             var worstTileIndex  = -1;
