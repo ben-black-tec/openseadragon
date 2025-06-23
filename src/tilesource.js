@@ -861,10 +861,13 @@ $.TileSource.prototype = {
      * @param {object} cacheObject context cache object
      */
     destroyTileCache: function (cacheObject) {
-        // closes cacheObject._data if it is an ImageBitmap
-        if(cacheObject._data && cacheObject._data.close){
-            cacheObject._data.close();
-        }
+        // ideally would close/deallocate cacheObject._data if it is an ImageBitmap
+        // to minimize chance of OOM and enforce cache evictions happen quickly
+        // but right now it crashes navigator even though the navigator has a completely separate
+        // cache object, very mysterious
+        // if(cacheObject._data && cacheObject._data.close){
+        //     cacheObject._data.close();
+        // }
         cacheObject._data = null;
         cacheObject._renderedContext = null;
     },
