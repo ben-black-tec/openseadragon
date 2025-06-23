@@ -164,7 +164,8 @@ $.TileCache.prototype = {
         const cutoff = options.cutoff || 0;
         const TIME_MS_CUTOFF = 2000;
         const curTime = $.now();
-        console.log(this._imagesLoadedCount, this._maxImageCacheCount);
+        let cutoffCount = 0;
+        let beingDrawnCount = 0;
         while ( this._imagesLoadedCount > this._maxImageCacheCount ) {
             var worstTile       = null;
             var worstTileIndex  = -1;
@@ -183,6 +184,12 @@ $.TileCache.prototype = {
                     prevTile.beingDrawn ||
                     prevTile.loading ||
                     prevTile.processing ) {
+                        if(prevTile.beingDrawn){
+                            beingDrawnCount++;
+                        }
+                        else if(prevTile.level <= cutoff ){
+                            cutoffCount++;
+                        }
                     continue;
                 } else if ( !worstTile ) {
                     worstTile       = prevTile;
@@ -214,6 +221,7 @@ $.TileCache.prototype = {
                 break;
             }
         }
+        console.log(this._imagesLoadedCount, this._maxImageCacheCount, cutoffCount, beingDrawnCount, cutoff);
 
         this._tilesLoaded.push(new TileRecord({
             tile: options.tile,
