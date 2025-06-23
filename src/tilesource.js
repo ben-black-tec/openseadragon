@@ -344,7 +344,7 @@ $.TileSource.prototype = {
 
     /**
      * @function
-     * @returns {Number} The highest level in this tile source that has at least 6x6 tiles.
+     * @returns {Number} The highest level in this tile source that can be contained in a single tile.
      */
     getClosestLevel: function() {
         var i,
@@ -352,12 +352,12 @@ $.TileSource.prototype = {
 
         for (i = this.minLevel + 1; i <= this.maxLevel; i++){
             tiles = this.getNumTiles(i);
-            if (tiles.x >= 6 || tiles.y >= 6) {
+            if (tiles.x > 1 || tiles.y > 1) {
                 break;
             }
         }
 
-        return i;
+        return i - 1;
     },
 
     /**
