@@ -297,6 +297,7 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
                 this.scanvas.width / highTileRatio,
                 this.scanvas.height / highTileRatio
             );
+            console.log(this.scanvas.width, this.scanvas.height);
             this.context.restore();
         }
 
