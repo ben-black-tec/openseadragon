@@ -109,7 +109,8 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
      * Draws the TiledImages
      */
     draw(tiledImages) {
-        var viewportSize = this._calculateCanvasSize();
+        const viewportSize = this._calculateCanvasSize();
+        const degrees = this.viewport.getRotation(true) % 360;
         if (
             this.canvas.width !== viewportSize.x ||
             this.canvas.height !== viewportSize.y
@@ -172,16 +173,18 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
             // make the scanvas big enough to handle all possible rotations
             // also necessary to fix weird artifacts caused by scanvas not
             // being big enough
-            const sizeCeil = Math.ceil(
-                Math.sqrt(
-                    adjViewPortWidth * adjViewPortWidth +
-                        adjViewPortHeight * adjViewPortHeight
-                )
-            );
-            roundingSpace += Math.max(
-                sizeCeil - adjViewPortWidth,
-                sizeCeil - adjViewPortHeight
-            );
+            if(degrees !== 0){
+                const sizeCeil = Math.ceil(
+                    Math.sqrt(
+                        adjViewPortWidth * adjViewPortWidth +
+                            adjViewPortHeight * adjViewPortHeight
+                    )
+                );
+                roundingSpace += Math.max(
+                    sizeCeil - adjViewPortWidth,
+                    sizeCeil - adjViewPortHeight
+                );
+            }
 
             let viewportSizeX =
                 Math.ceil(adjViewPortWidth + roundingSpace);
@@ -263,7 +266,6 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
             // note that operations are applied in reverse order of intutive operations
             this.context.save();
 
-            const degrees = this.viewport.getRotation(true) % 360;
             if (degrees !== 0) {
                 const point = this._getCanvasCenter();
 
@@ -297,7 +299,6 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
                 this.scanvas.width / highTileRatio,
                 this.scanvas.height / highTileRatio
             );
-            console.log(this.scanvas.width, this.scanvas.height);
             this.context.restore();
         }
 
