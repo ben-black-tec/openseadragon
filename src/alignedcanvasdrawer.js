@@ -307,24 +307,24 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
             for (const idx in tiledImages) {
                 const tiledImage = tiledImages[idx];
                 const imageTiles = imageTilesList[idx];
-                for (const tile of imageTiles) {
-                    /**
-                     * Raised when a tile is drawn to the canvas. Only valid for
-                     * context2d and html drawers.
-                     *
-                     * @event tile-drawn
-                     * @memberof OpenSeadragon.Viewer
-                     * @type {object}
-                     * @property {OpenSeadragon.Viewer} eventSource - A reference to the Viewer which raised the event.
-                     * @property {OpenSeadragon.TiledImage} tiledImage - Which TiledImage is being drawn.
-                     * @property {OpenSeadragon.Tile} tile
-                     * @property {?Object} userData - Arbitrary subscriber-defined object.
-                     */
-                    // this.viewer.raiseEvent("tile-drawn", {
-                    //     tiledImage: tiledImage,
-                    //     tile: tile,
-                    // });
-                }
+                // for (const tile of imageTiles) {
+                //     /**
+                //      * Raised when a tile is drawn to the canvas. Only valid for
+                //      * context2d and html drawers.
+                //      *
+                //      * @event tile-drawn
+                //      * @memberof OpenSeadragon.Viewer
+                //      * @type {object}
+                //      * @property {OpenSeadragon.Viewer} eventSource - A reference to the Viewer which raised the event.
+                //      * @property {OpenSeadragon.TiledImage} tiledImage - Which TiledImage is being drawn.
+                //      * @property {OpenSeadragon.Tile} tile
+                //      * @property {?Object} userData - Arbitrary subscriber-defined object.
+                //      */
+                //     // this.viewer.raiseEvent("tile-drawn", {
+                //     //     tiledImage: tiledImage,
+                //     //     tile: tile,
+                //     // });
+                // }
 
                 this._drawDebugInfo(tiledImage, imageTiles);
 
