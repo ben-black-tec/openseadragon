@@ -156,10 +156,8 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
 
             let highTileRatio = highTile.sourceBounds.width / highTile.size.x;
 
-            const viewPortWidth =
-                this.viewport._containerInnerSize.x * $.pixelDensityRatio;
-            const viewPortHeight =
-                this.viewport._containerInnerSize.y * $.pixelDensityRatio;
+            const viewPortWidth = viewportSize.x;
+            const viewPortHeight = viewportSize.y;
 
             // basically an epsilon in pixels
             // for any border interpolation and such
