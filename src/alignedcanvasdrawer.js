@@ -319,10 +319,10 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
                      * @property {OpenSeadragon.Tile} tile
                      * @property {?Object} userData - Arbitrary subscriber-defined object.
                      */
-                    this.viewer.raiseEvent("tile-drawn", {
-                        tiledImage: tiledImage,
-                        tile: tile,
-                    });
+                    // this.viewer.raiseEvent("tile-drawn", {
+                    //     tiledImage: tiledImage,
+                    //     tile: tile,
+                    // });
                 }
 
                 this._drawDebugInfo(tiledImage, imageTiles);
