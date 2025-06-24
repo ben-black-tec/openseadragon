@@ -233,9 +233,12 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
                 this.scontext.fillStyle = tiledImage.placeholderFillStyle || $.DEFAULT_SETTINGS.placeholderFillStyle;
                 // fill in background on integer boundary within float boundary
                 // to avoid flickering lines and other aliasing artifacts.
-                const sxroundoff = Math.ceil(sx) - sx;
-                const syroundoff = Math.ceil(sy) - sy;
-                this.scontext.fillRect(Math.ceil(sx), Math.ceil(sy), Math.floor(swidth - sxroundoff), Math.floor(sheight - syroundoff));
+                // needs to be at least a full pixel during rotations for some reason
+                // multiple pixels if
+                const NUM_PIXELS_UNDERDRAW = 2;
+                const sxroundoff = Math.ceil(sx) - sx + NUM_PIXELS_UNDERDRAW * 2;
+                const syroundoff = Math.ceil(sy) - sy + NUM_PIXELS_UNDERDRAW * 2;
+                this.scontext.fillRect(Math.ceil(sx) + NUM_PIXELS_UNDERDRAW, Math.ceil(sy) + NUM_PIXELS_UNDERDRAW, Math.floor(swidth - sxroundoff), Math.floor(sheight - syroundoff));
             }
 
             for (const idx in tiledImages) {
