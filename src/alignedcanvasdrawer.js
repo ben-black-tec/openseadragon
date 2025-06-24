@@ -213,6 +213,7 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
                     viewportSizeY
                 );
             }
+            console.log(this.canvas.height, viewPortWidth, this.scanvas.height, highTileRatio, this.scanvas.height / highTileRatio);
             // clears background context to alpha zero
             // NOTE: observed janky behavior in certain cases,
             this.scontext.clearRect(
