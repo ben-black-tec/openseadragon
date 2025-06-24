@@ -379,7 +379,7 @@
                         let tile = tilesToDraw[tileIndex].tile;
                         let indexInDrawArray = tileIndex % maxTextures;
                         let numTilesToDraw =  indexInDrawArray + 1;
-                        let rendered = (tile.cacheImageRecord && tile.cacheImageRecord.getData());
+                        let rendered = tile.context2D || (tile.cacheImageRecord && tile.cacheImageRecord.getData());
                         if (!rendered) {
                             const imgRecord = tiledImage._tileCache.getImageRecord(tile.cacheKey);
                             if (imgRecord) {
@@ -905,7 +905,7 @@
                 return;
             }
 
-            let rendered = (tile.cacheImageRecord && tile.cacheImageRecord.getData());
+            let rendered = tile.context2D || (tile.cacheImageRecord && tile.cacheImageRecord.getData());
             if (!rendered) {
                 const imgRecord = tiledImage._tileCache.getImageRecord(tile.cacheKey);
                 if (imgRecord) {

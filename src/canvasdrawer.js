@@ -550,7 +550,7 @@ class CanvasDrawer extends OpenSeadragon.DrawerBase{
             size     = tile.size.times($.pixelDensityRatio),
             rendered;
 
-        rendered = (tile.cacheImageRecord && tile.cacheImageRecord.getData());
+        rendered = tile.context2D || (tile.cacheImageRecord && tile.cacheImageRecord.getData());
         if (!rendered) {
             const imgRecord = tiledImage._tileCache.getImageRecord(tile.cacheKey);
             if (imgRecord) {
