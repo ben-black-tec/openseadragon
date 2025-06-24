@@ -234,7 +234,8 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
                 // fill in background on integer boundary within float boundary
                 // to avoid flickering lines and other aliasing artifacts.
                 // needs to be at least a full pixel during rotations for some reason
-                // multiple pixels if
+                // multiple pixels just to be careful in cases of high pixel density or downsampling or something
+                // causes issues
                 const NUM_PIXELS_UNDERDRAW = 2;
                 const sxroundoff = Math.ceil(sx) - sx + NUM_PIXELS_UNDERDRAW * 2;
                 const syroundoff = Math.ceil(sy) - sy + NUM_PIXELS_UNDERDRAW * 2;
