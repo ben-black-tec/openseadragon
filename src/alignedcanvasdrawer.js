@@ -144,7 +144,8 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
                 const newHighTileRatio = newTile.sourceBounds.width / newTile.size.x;
                 // don't draw at excessive resolutions if there are only a handfull of super-high res tiles floating around
                 const isUnderSizedTile = newHighTileRatio > 2.2;
-                const isWorseTile = curHighTileRatio >= newHighTileRatio;
+                // chose highest ratio, or if equal, biggest tile
+                const isWorseTile = curHighTileRatio > newHighTileRatio || (curHighTileRatio === newHighTileRatio && curHighTile.size.x > newTile.size.x);
                 if (isUnderSizedTile || isWorseTile) {
                     return curHighTile;
                 }
