@@ -111,11 +111,15 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
     draw(tiledImages) {
         const viewportSize = this._calculateCanvasSize();
         const degrees = this.viewport.getRotation(true) % 360;
+        const imageTilesList = tiledImages.map((tiledImage) =>
+            tiledImage.getTilesToDraw().map((info) => info.tile)
+        );
+        const allTiles = imageTilesList.flat();
         if (
             this.canvas.width !== viewportSize.x ||
             this.canvas.height !== viewportSize.y
         ) {
-            console.log("Canvas changed size!", viewportSize.x, viewportSize.y, tiledImages);
+            console.log("Canvas changed size!", viewportSize.x, viewportSize.y, tiledImages, imageTilesList);
             this.canvas.width = viewportSize.x;
             this.canvas.height = viewportSize.y;
         }
@@ -127,11 +131,7 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
             this.canvas.width,
             this.canvas.height
         );
-        const imageTilesList = tiledImages.map((tiledImage) =>
-            tiledImage.getTilesToDraw().map((info) => info.tile)
-        );
 
-        const allTiles = imageTilesList.flat();
         if (allTiles.length) {
             const tiledImage = tiledImages[0];
             let levelSet = Array.from(
