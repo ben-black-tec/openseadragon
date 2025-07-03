@@ -119,7 +119,7 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
             this.canvas.width !== viewportSize.x ||
             this.canvas.height !== viewportSize.y
         ) {
-            console.log("Canvas changed size!", viewportSize.x, viewportSize.y, tiledImages, imageTilesList);
+            console.log("Canvas changed size!", viewportSize.x, viewportSize.y, tiledImages, imageTilesList, this.imageTilesList[0].cacheImageRecord.getData());
             this.canvas.width = viewportSize.x;
             this.canvas.height = viewportSize.y;
         }
