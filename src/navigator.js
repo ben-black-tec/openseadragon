@@ -126,7 +126,7 @@ $.Navigator = function( options ){
         blendTime:              0,
         animationTime:          options.animationTime,
         // disable autoResize since resize behavior is implemented differently by the navigator
-        autoResize:             false,
+        autoResize:             true,
         // prevent resizing the navigator from adding unwanted space around the image
         minZoomImageRatio:      1.0,
         background:             options.background,

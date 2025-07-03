@@ -510,12 +510,13 @@ class AlignedCanvasDrawer extends OpenSeadragon.DrawerBase {
             if ((tile.opacity && tile.opacity !== 1) || tile.opacity === 0) {
                 this.scontext.globalAlpha = tile.opacity;
             }
+            console.log(tile.sourceBounds.width, rendered.width, tile.sourceBounds.height, rendered.height);
             this.scontext.drawImage(
                 rendered,
                 0,
                 0,
-                rendered.width,
-                rendered.height,
+                tile.sourceBounds.width,
+                tile.sourceBounds.height,
                 // using rounded dest values to make sure the GPU aliases right
                 rdx,
                 rdy,
