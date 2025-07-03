@@ -263,6 +263,15 @@ $.TileCache.prototype = {
             delete this._imagesLoaded[tile.cacheKey];
             this._imagesLoadedCount--;
 
+            if(tile.context2D){
+                /**
+                 * Free up canvas memory
+                 * (iOS 12 or higher on 2GB RAM device has only 224MB canvas memory,
+                 * and Safari keeps canvas until its height and width will be set to 0).
+                 */
+                tile.context2D.width = 0;
+                tile.context2D.height = 0;
+            }
             /**
              * Triggered when an image has just been unloaded
              *
