@@ -133,7 +133,7 @@ $.Navigator = function( options ){
         opacity:                options.opacity,
         borderColor:            options.borderColor,
         displayRegionColor:     options.displayRegionColor,
-        drawer:                 $.AlignedCanvasDrawer,
+        drawer:                 'webgl',
     });
 
     options.minPixelRatio = this.minPixelRatio = viewer.minPixelRatio;
