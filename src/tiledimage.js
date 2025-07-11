@@ -2033,7 +2033,7 @@ $.extend($.TiledImage.prototype, $.EventSource.prototype, /** @lends OpenSeadrag
         }
 
         if ( time < this.lastResetTime ) {
-            $.console.warn( "Ignoring tile %s loaded before reset: %s", tile, tile.getUrl() );
+            $.console.debug( "Ignoring tile %s loaded before reset: %s", tile, tile.getUrl() );
             tile.loading = false;
             return;
         }
