@@ -122,7 +122,7 @@ $.Navigator = function( options ){
         mouseNavEnabled:        false,
         showNavigationControl:  false,
         showSequenceControl:    false,
-        immediateRender:        true,
+        immediateRender:        false,
         blendTime:              0,
         animationTime:          options.animationTime,
         // disable autoResize since resize behavior is implemented differently by the navigator
@@ -132,7 +132,8 @@ $.Navigator = function( options ){
         background:             options.background,
         opacity:                options.opacity,
         borderColor:            options.borderColor,
-        displayRegionColor:     options.displayRegionColor
+        displayRegionColor:     options.displayRegionColor,
+        drawer:                 'webgl',
     });
 
     options.minPixelRatio = this.minPixelRatio = viewer.minPixelRatio;

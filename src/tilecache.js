@@ -132,9 +132,6 @@ $.TileCache.prototype = {
         $.console.assert( options.tile.cacheKey, "[TileCache.cacheTile] options.tile.cacheKey is required" );
         $.console.assert( options.tiledImage, "[TileCache.cacheTile] options.tiledImage is required" );
 
-        var cutoff = options.cutoff || 0;
-        var insertionIndex = this._tilesLoaded.length;
-
         var imageRecord = this._imagesLoaded[options.tile.cacheKey];
         if (!imageRecord) {
 
@@ -161,9 +158,13 @@ $.TileCache.prototype = {
         imageRecord.addTile(options.tile);
         options.tile.cacheImageRecord = imageRecord;
 
-        // Note that just because we're unloading a tile doesn't necessarily mean
-        // we're unloading an image. With repeated calls it should sort itself out, though.
-        if ( this._imagesLoadedCount > this._maxImageCacheCount ) {
+        // options.cutoff is the lowest layer
+        // where the entire scene can be contained in a single tile
+        // i.e. preview image/etc, so this doesn't add much cache load
+        const cutoff = options.cutoff || 0;
+        const TIME_MS_CUTOFF = 2000;
+        const curTime = $.now();
+        while ( this._imagesLoadedCount > this._maxImageCacheCount ) {
             var worstTile       = null;
             var worstTileIndex  = -1;
             var worstTileRecord = null;
@@ -173,7 +174,14 @@ $.TileCache.prototype = {
                 prevTileRecord = this._tilesLoaded[ i ];
                 prevTile = prevTileRecord.tile;
 
-                if ( prevTile.level <= cutoff || prevTile.beingDrawn ) {
+                // for some reason beingDrawn, loading, processing checks not
+                // good enough, also need to check time just to be absolutely sure
+                // the tile isn't being drawn right now
+                if ( prevTile.level <= cutoff ||
+                    curTime - prevTile.lastTouchTime <= TIME_MS_CUTOFF ||
+                    prevTile.beingDrawn ||
+                    prevTile.loading ||
+                    prevTile.processing ) {
                     continue;
                 } else if ( !worstTile ) {
                     worstTile       = prevTile;
@@ -195,16 +203,21 @@ $.TileCache.prototype = {
                 }
             }
 
-            if ( worstTile && worstTileIndex >= 0 ) {
+            if ( worstTile ) {
                 this._unloadTile(worstTileRecord);
-                insertionIndex = worstTileIndex;
+                // since the cache is finite sized, this
+                // n^2 splicing operation shouldn't be too bad
+                this._tilesLoaded.splice(worstTileIndex, 1);
+            }
+            else{
+                break;
             }
         }
 
-        this._tilesLoaded[ insertionIndex ] = new TileRecord({
+        this._tilesLoaded.push(new TileRecord({
             tile: options.tile,
             tiledImage: options.tiledImage
-        });
+        }));
     },
 
     /**
@@ -236,10 +249,6 @@ $.TileCache.prototype = {
         var tile = tileRecord.tile;
         var tiledImage = tileRecord.tiledImage;
 
-        // tile.getCanvasContext should always exist in normal usage (with $.Tile)
-        // but the tile cache test passes in a dummy object
-        let context2D = tile.getCanvasContext && tile.getCanvasContext();
-
         tile.unload();
         tile.cacheImageRecord = null;
 
@@ -254,29 +263,28 @@ $.TileCache.prototype = {
             delete this._imagesLoaded[tile.cacheKey];
             this._imagesLoadedCount--;
 
-            if(context2D){
+            if(tile.context2D){
                 /**
                  * Free up canvas memory
                  * (iOS 12 or higher on 2GB RAM device has only 224MB canvas memory,
                  * and Safari keeps canvas until its height and width will be set to 0).
                  */
-                context2D.canvas.width = 0;
-                context2D.canvas.height = 0;
-
-                /**
-                 * Triggered when an image has just been unloaded
-                 *
-                 * @event image-unloaded
-                 * @memberof OpenSeadragon.Viewer
-                 * @type {object}
-                 * @property {CanvasRenderingContext2D} context2D - The context that is being unloaded
-                 * @private
-                 */
-                tiledImage.viewer.raiseEvent("image-unloaded", {
-                    context2D: context2D,
-                    tile: tile
-                });
+                tile.context2D.width = 0;
+                tile.context2D.height = 0;
             }
+            /**
+             * Triggered when an image has just been unloaded
+             *
+             * @event image-unloaded
+             * @memberof OpenSeadragon.Viewer
+             * @type {object}
+             * @property {CanvasRenderingContext2D} context2D - The context that is being unloaded
+             * @private
+             */
+            tiledImage.viewer.raiseEvent("image-unloaded", {
+                context2D: null,
+                tile: tile
+            });
 
         }
 

@@ -550,15 +550,20 @@ class CanvasDrawer extends OpenSeadragon.DrawerBase{
             size     = tile.size.times($.pixelDensityRatio),
             rendered;
 
-        if (!tile.context2D && !tile.cacheImageRecord) {
+        rendered = tile.context2D || (tile.cacheImageRecord && tile.cacheImageRecord.getData());
+        if (!rendered) {
+            const imgRecord = tiledImage._tileCache.getImageRecord(tile.cacheKey);
+            if (imgRecord) {
+                rendered = imgRecord.getData();
+            }
+        }
+
+        if (!rendered) {
             $.console.warn(
                 '[Drawer._drawTileToCanvas] attempting to draw tile %s when it\'s not cached',
                 tile.toString());
             return;
         }
-
-        rendered = tile.getCanvasContext();
-
         if ( !tile.loaded || !rendered ){
             $.console.warn(
                 "Attempting to draw tile %s when it's not yet loaded.",

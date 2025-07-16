@@ -130,7 +130,7 @@ $.TiledImage = function( options ) {
         scale = options.width;
         delete options.width;
 
-        if ( options.height ) {
+        if ( options.height && scale !== options.height / this.normHeight) {
             $.console.error( "specifying both width and height to a tiledImage is not supported" );
             delete options.height;
         }
@@ -1087,7 +1087,8 @@ $.extend($.TiledImage.prototype, $.EventSource.prototype, /** @lends OpenSeadrag
         tileArray.forEach(tileInfo => {
             tileInfo.tile.beingDrawn = true;
         });
-        this._lastDrawn = tileArray;
+        // copy array so that modifications to this._tilesToDraw don't impact it
+        this._lastDrawn = tileArray.slice();
         return tileArray;
     },
 
@@ -1320,6 +1321,13 @@ $.extend($.TiledImage.prototype, $.EventSource.prototype, /** @lends OpenSeadrag
         var currentTime = $.now();
 
         // reset each tile's beingDrawn flag
+        for (var levelTiles of Object.values(this.tilesMatrix)) {
+            for (var xTiles of Object.values(levelTiles)) {
+                for (var yTile of Object.values(xTiles)) {
+                    yTile.beingDrawn = false;
+                }
+            }
+        }
         this._lastDrawn.forEach(tileinfo => {
             tileinfo.tile.beingDrawn = false;
         });
@@ -1335,6 +1343,7 @@ $.extend($.TiledImage.prototype, $.EventSource.prototype, /** @lends OpenSeadrag
 
         // make a list of levels to use for the current zoom level
         var levelList = new Array(highestLevel - lowestLevel + 1);
+
         // go from highest to lowest resolution
         for(let i = 0, level = highestLevel; level >= lowestLevel; level--, i++){
             levelList[i] = level;
@@ -1354,13 +1363,12 @@ $.extend($.TiledImage.prototype, $.EventSource.prototype, /** @lends OpenSeadrag
                 break;
             }
         }
-
-
         // Update any level that will be drawn.
         // We are iterating from highest resolution to lowest resolution
         // Once a level fully covers the viewport the loop is halted and
         // lower-resolution levels are skipped
         let useLevel = false;
+        let skipHigherLevels = false;
         for (let i = 0; i < levelList.length; i++) {
             let level = levelList[i];
 
@@ -1397,13 +1405,24 @@ $.extend($.TiledImage.prototype, $.EventSource.prototype, /** @lends OpenSeadrag
             var levelVisibility = optimalRatio / Math.abs(
                 optimalRatio - targetRenderPixelRatio
             );
-
+            let curDrawArea = drawArea;
+            const DIV_RATIO = 8;
+            if(this.immediateRender && currentRenderPixelRatio >= DIV_RATIO * this.minPixelRatio){
+                const AREA_RATIO = Math.sqrt(currentRenderPixelRatio / (DIV_RATIO * this.minPixelRatio));
+                curDrawArea = new $.Rect(curDrawArea.x - curDrawArea.width * AREA_RATIO, curDrawArea.y - curDrawArea.height * AREA_RATIO, curDrawArea.width * (1 + AREA_RATIO * 2), curDrawArea.height * (1 + AREA_RATIO * 2));
+                // prioritize loading higer resolution levels over lower ones,
+                // backwards from normal way of doing things
+                levelVisibility = level;
+            }
+            else if (skipHigherLevels){
+                continue;
+            }
             // Update the level and keep track of 'best' tiles to load
             var result = this._updateLevel(
                 level,
                 levelOpacity,
                 levelVisibility,
-                drawArea,
+                curDrawArea,
                 currentTime,
                 bestTiles
             );
@@ -1426,7 +1445,7 @@ $.extend($.TiledImage.prototype, $.EventSource.prototype, /** @lends OpenSeadrag
             // Stop the loop if lower-res tiles would all be covered by
             // already drawn tiles
             if (this._providesCoverage(this.coverage, level)) {
-                break;
+                skipHigherLevels = true;
             }
         }
 
@@ -2014,7 +2033,7 @@ $.extend($.TiledImage.prototype, $.EventSource.prototype, /** @lends OpenSeadrag
         }
 
         if ( time < this.lastResetTime ) {
-            $.console.warn( "Ignoring tile %s loaded before reset: %s", tile, tile.getUrl() );
+            $.console.debug( "Ignoring tile %s loaded before reset: %s", tile, tile.getUrl() );
             tile.loading = false;
             return;
         }
